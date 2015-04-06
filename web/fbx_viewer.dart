@@ -96,10 +96,10 @@ class FbxViewer {
                                new Vector3(-30.0, 100.0, 0.0),
                                new Vector3(0.0, 1.0, 0.0));*/
 
-    /*String filename = 'data/humanoid_ascii.fbx';
+    String filename = 'data/humanoid_ascii.fbx';
     _mvMatrix = makeViewMatrix(new Vector3(-30.0, 100.0, 400.0),
                                new Vector3(-30.0, 100.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
+                               new Vector3(0.0, 1.0, 0.0));
 
     /*String filename = 'data/humanoid_2006_ascii.fbx';
     _mvMatrix = makeViewMatrix(new Vector3(-30.0, 100.0, 400.0),
@@ -112,10 +112,10 @@ class FbxViewer {
                                    new Vector3(0.0, 1.0, 0.0));*/
 
 
-    String filename = 'data/knight_2014.fbx';
+    /*String filename = 'data/knight_2014.fbx';
     _mvMatrix = makeViewMatrix(new Vector3(20.0, 0.0, 20.0),
                                new Vector3(0.0, 0.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));
+                               new Vector3(0.0, 1.0, 0.0));*/
 
 
     var req = new HttpRequest();
@@ -129,6 +129,11 @@ class FbxViewer {
     req.onLoadEnd.listen((e) {
       print('onLoadEnd ${req.status}');
       if (req.status == 200) {
+        var loading = querySelectorAll('#loading')[0];
+        if (loading != null) {
+          loading.remove();
+        }
+
         // Convert the text to binary byte list.
         List<int> bytes = new Uint8List.view(req.response);
         print('LOADED FBX');

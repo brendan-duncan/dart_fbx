@@ -16,6 +16,10 @@ FBX (Filmbox) is a proprietary file format (.fbx) developed by Autodesk.
 It is used to provide interoperability between digital content creation 
 applications.
 
+## Example ##
+
+[FBX Viewer](http://brendan-duncan.github.io/dart_fbx/fbx_viewer.html)
+
 ## Limitations ##
 
 FBX is a closed format, so while this library does it's best to interpret the
