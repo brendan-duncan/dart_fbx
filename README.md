@@ -14,7 +14,7 @@ This supports ASCII and Binary FBX files.
 
 FBX (Filmbox) is a proprietary file format (.fbx) developed by Autodesk. 
 It is used to provide interoperability between digital content creation 
-applications.
+applications. It provides support for 3D geometry, animation curves, and basic deformations such as skinning and blend shapes.
 
 ## Example ##
 
