@@ -1,0 +1,56 @@
+/*
+ * Copyright (C) 2015 Brendan Duncan. All rights reserved.
+ */
+part of fbx;
+
+class FbxAnimCurve extends FbxObject {
+  double defaultValue;
+  List<FbxAnimKey> keys = [];
+
+  FbxAnimCurve(int id, String name, FbxElement element, FbxScene scene)
+    : super(id, name, 'AnimCurve', element, scene) {
+
+    if (element == null) {
+      return;
+    }
+
+    //int version = 0;
+    List keyTime;
+    List keyValue;
+
+    for (FbxElement c in element.children) {
+      if (c.id == 'Default') {
+
+      } else if (c.id == 'KeyVer') {
+        //version = c.getInt(0);
+      } else if (c.id == 'KeyTime') {
+        keyTime = c.children[0].properties;
+      } else if (c.id == 'KeyValueFloat') {
+        keyValue = c.children[0].properties;
+      } else if (c.id == 'KeyAttrFlags') {
+
+      } else if (c.id == 'KeyAttrDataFloat') {
+
+      } else if (c.id == 'KeyAttrRefCount') {
+
+      }
+    }
+
+    if (keyTime != null && keyValue != null) {
+      if (keyTime.length == keyValue.length) {
+        for (int i = 0; i < keyTime.length; ++i) {
+          keys.add(new FbxAnimKey(_int(keyTime[i]),
+                                  _double(keyValue[i]),
+                                  FbxAnimKey.INTERPOLATION_LINEAR));
+        }
+      }
+    }
+  }
+
+
+  int get numKeys => keys.length;
+
+  int keyTime(int index) => keys[index].time;
+
+  double keyValue(int index) => keys[index].value;
+}
