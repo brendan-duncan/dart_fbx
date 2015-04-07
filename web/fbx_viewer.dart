@@ -16,7 +16,6 @@ part 'gl/gl_shader.dart';
 class FbxViewer {
   GL.RenderingContext _gl;
   List<GlObject> _objects = [];
-  List<GlLocator> _locators = [];
   int _viewportWidth;
   int _viewportHeight;
 
@@ -224,13 +223,6 @@ class FbxViewer {
       if (_scene.currentFrame > _scene.endFrame) {
         _scene.currentFrame = _scene.startFrame;
       }
-    }
-
-    for (int i = 0, len = _locators.length; i < len; ++i) {
-      GlLocator loc = _locators[i];
-      FbxNode limb = _limbNodes[i];
-      loc.transform = limb.evalGlobalTransform();
-      loc.draw(_mvMatrix, _pMatrix);
     }
 
     _normalShader.bind();
