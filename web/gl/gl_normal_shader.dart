@@ -22,6 +22,5 @@ class GlNormalShader extends GlShader {
     """;
 
   GlNormalShader(GL.RenderingContext gl)
-    : super(gl, vertexSource, fragmentSource) {
-  }
+    : super(gl, vertexSource, fragmentSource);
 }

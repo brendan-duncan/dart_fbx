@@ -10,7 +10,7 @@ part 'gl/gl_locator.dart';
 part 'gl/gl_normal_shader.dart';
 part 'gl/gl_object.dart';
 part 'gl/gl_shader.dart';
-
+part 'gl/gl_skinning_shader.dart';
 
 
 class FbxViewer {
