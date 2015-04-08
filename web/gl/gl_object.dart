@@ -8,6 +8,9 @@ class GlObject {
   GL.Buffer indexBuffer;
   int indexCount;
   Matrix4 transform;
+  GL.Buffer skinWeights;
+  GL.Buffer skinIndices;
+  Float32List skinPalette;
 
   GlObject(this._gl);
 
@@ -40,5 +43,19 @@ class GlObject {
     _gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, vertices, mode);
 
     indexCount = vertices.length;
+  }
+
+
+  void setSkinning(Float32List weights, Float32List indices) {
+    if (skinWeights == null) {
+      skinWeights = _gl.createBuffer();
+      skinIndices = _gl.createBuffer();
+    }
+
+    _gl.bindBuffer(GL.ARRAY_BUFFER, skinWeights);
+    _gl.bufferData(GL.ARRAY_BUFFER, weights, GL.STATIC_DRAW);
+
+    _gl.bindBuffer(GL.ARRAY_BUFFER, skinIndices);
+    _gl.bufferData(GL.ARRAY_BUFFER, indices, GL.STATIC_DRAW);
   }
 }

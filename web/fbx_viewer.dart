@@ -27,6 +27,7 @@ class FbxViewer {
   Matrix4 _mvMatrix;
   GlShader _colorShader;
   GlShader _normalShader;
+  GlShader _skinningShader;
 
   FbxViewer(CanvasElement canvas) {
     _viewportWidth = canvas.width;
@@ -35,6 +36,7 @@ class FbxViewer {
 
     _normalShader = new GlNormalShader(_gl);
     _colorShader = new GlColorShader(_gl);
+    _skinningShader = new GlSkinningShader(_gl);
 
     _gl.clearColor(0.3, 0.5, 0.7, 1.0);
     _gl.enable(GL.DEPTH_TEST);
@@ -138,13 +140,8 @@ class FbxViewer {
         print('LOADED FBX');
 
         _scene = new FbxLoader().load(bytes);
-        _printScene(_scene);
+        //_printScene(_scene);
 
-        /*for (FbxSkeleton limb in _scene.skeletonNodes) {
-          GlLocator loc = new GlLocator(_gl, _colorShader);
-          _locators.add(loc);
-          _limbNodes.add(limb);
-        }*/
 
         for (FbxMesh mesh in _scene.meshes) {
           FbxNode meshNode = mesh.getParentNode();
@@ -165,6 +162,8 @@ class FbxViewer {
           object.setPoints(mesh.display[0].points, GL.DYNAMIC_DRAW);
           object.setNormals(mesh.display[0].normals, GL.DYNAMIC_DRAW);
           object.setVertices(mesh.display[0].vertices);
+          object.setSkinning(mesh.display[0].skinWeights,
+                             mesh.display[0].skinIndices);
 
           object.transform = meshNode.evalGlobalTransform();
           _meshNodes.add(meshNode);
@@ -225,8 +224,11 @@ class FbxViewer {
       }
     }
 
-    _normalShader.bind();
-    _normalShader.setMatrixUniforms(_mvMatrix, _pMatrix);
+    //_normalShader.bind();
+    //_normalShader.setMatrixUniforms(_mvMatrix, _pMatrix);
+
+    _skinningShader.bind();
+    _skinningShader.setMatrixUniforms(_mvMatrix, _pMatrix);
 
     FbxPose pose = _scene != null ? _scene.getPose(0) : null;
 
@@ -235,16 +237,23 @@ class FbxViewer {
       FbxNode meshNode = _meshNodes[i];
       FbxMesh mesh = meshNode.findConnectionsByType('Mesh').first;
 
-      mesh.computeDeformations();
+      obj.skinPalette = mesh.computeSkinPalette(obj.skinPalette);
+
+      //mesh.computeDeformations();
       obj.setPoints(mesh.display[0].points, GL.DYNAMIC_DRAW);
 
       obj.transform = meshNode.evalGlobalTransform();
 
-      _normalShader.bindGeometry(obj);
-      _normalShader.draw(GL.TRIANGLES);
+      //_normalShader.bindGeometry(obj);
+      //_normalShader.draw(GL.TRIANGLES);
+
+      _skinningShader.bindGeometry(obj);
+      _skinningShader.draw(GL.TRIANGLES);
     }
 
-    _normalShader.unbind();
+    //_normalShader.unbind();
+
+    _skinningShader.unbind();
   }
 }
 

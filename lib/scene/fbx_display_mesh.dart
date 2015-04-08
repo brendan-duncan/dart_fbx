@@ -5,12 +5,16 @@ part of fbx;
 
 
 class FbxDisplayMesh {
+  int numPoints;
   Float32List points;
   Float32List normals;
   Float32List uvs;
   Float32List colors;
   Uint16List vertices;
+  Float32List skinWeights;
+  Float32List skinIndices;
   List<List<int>> pointMap;
+
 
   void generateSmoothNormals() {
     if (vertices == null || points == null) {

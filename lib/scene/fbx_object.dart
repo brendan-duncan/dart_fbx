@@ -40,20 +40,38 @@ class FbxObject {
   }
 
 
-  void connectTo(FbxObject object) {
-    connectedTo.add(object);
-    object.connectedFrom.add(this);
-  }
+  int get numConnectedFrom => connectedFrom.length;
+
+  FbxObject getConnectedFrom(int index) =>
+      (index >= 0 && index < connectedFrom.length)
+      ? connectedFrom[index] : null;
+
+  int get numConnectedTo => connectedTo.length;
+
+  FbxObject getConnectedTo(int index) =>
+        (index >= 0 && index < connectedTo.length)
+        ? connectedTo[index] : null;
 
 
-  List<FbxObject> findConnectionsByType(String type) {
-    List<FbxObject> connections = [];
+  List<FbxObject> findConnectionsByType(String type,
+                                        [List<FbxObject> connections]) {
+    if (connections == null) {
+      connections = [];
+    }
+
     for (FbxObject obj in connectedTo) {
       if (obj.type == type) {
         connections.add(obj);
       }
     }
+
     return connections;
+  }
+
+
+  void connectTo(FbxObject object) {
+    connectedTo.add(object);
+    object.connectedFrom.add(this);
   }
 
 
