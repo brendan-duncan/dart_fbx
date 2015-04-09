@@ -57,7 +57,13 @@ class FbxMesh extends FbxGeometry {
     var clusters = [];
     List<FbxObject> skins = findConnectionsByType('Skin');
     for (FbxSkinDeformer skin in skins) {
-      skin.findConnectionsByType('Cluster', clusters);
+      List l = [];
+      skin.findConnectionsByType('Cluster', l);
+      for (var c in l) {
+        if (c.indexes != null && c.weights != null) {
+          clusters.add(c);
+        }
+      }
     }
     return clusters;
   }
@@ -341,6 +347,7 @@ class FbxMesh extends FbxGeometry {
         double index = ci.toDouble();
 
         FbxCluster cluster = _clusters[ci];
+
         for (int xi = 0, numPts = cluster.indexes.length; xi < numPts; ++xi) {
           double weight = cluster.weights[xi];
           int pi = cluster.indexes[xi];
