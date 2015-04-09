@@ -1,3 +1,4 @@
 packages
 .pub/bin/sdk-version
 pubspec.lock
+build/

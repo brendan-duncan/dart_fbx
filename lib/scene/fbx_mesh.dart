@@ -53,7 +53,7 @@ class FbxMesh extends FbxGeometry {
   }
 
 
-  List<FbxCluster> getClusters() {
+  List<FbxCluster> _getClusters() {
     var clusters = [];
     List<FbxObject> skins = findConnectionsByType('Skin');
     for (FbxSkinDeformer skin in skins) {
@@ -107,15 +107,15 @@ class FbxMesh extends FbxGeometry {
       return null;
     }
 
-    List<FbxCluster> clusters = getClusters();
+
     if (data == null) {
-      data = new Float32List(clusters.length * 16);
+      data = new Float32List(_clusters.length * 16);
     }
 
     FbxPose pose = scene.getPose(0);
 
-    for (int i = 0, j = 0, len = clusters.length; i < len; ++i) {
-      FbxCluster cluster = clusters[i];
+    for (int i = 0, j = 0, len = _clusters.length; i < len; ++i) {
+      FbxCluster cluster = _clusters[i];
       Matrix4 w = _getClusterMatrix(meshNode, cluster, pose);
       for (int k = 0; k < 16; ++k) {
         data[j++] = w.storage[k];
@@ -194,8 +194,7 @@ class FbxMesh extends FbxGeometry {
   void generateClusterMap() {
     clusterMap = new List(points.length);
 
-    List<FbxCluster> clusters = getClusters();
-    for (FbxCluster cluster in clusters) {
+    for (FbxCluster cluster in _clusters) {
       if (cluster.indexes == null || cluster.weights == null) {
         continue;
       }
@@ -217,6 +216,9 @@ class FbxMesh extends FbxGeometry {
     if (points == null) {
       return;
     }
+
+    _clusters = _getClusters();
+    generateClusterMap();
 
     FbxDisplayMesh disp = new FbxDisplayMesh();
     display.add(disp);
@@ -329,26 +331,36 @@ class FbxMesh extends FbxGeometry {
       disp.generateSmoothNormals();
     }
 
-    List<FbxCluster> clusters = getClusters();
-    if (clusters.isNotEmpty) {
+    if (_clusters.isNotEmpty) {
       disp.skinWeights = new Float32List(disp.numPoints * 4);
       disp.skinIndices = new Float32List(disp.numPoints * 4);
 
-      disp.skinIndices.fillRange(0, disp.skinIndices.length - 1, -1.0);
-
       Int32List count = new Int32List(points.length);
 
-      for (int ci = 0, len = clusters.length; ci < len; ++ci) {
-        FbxCluster cluster = clusters[ci];
+      for (int ci = 0, len = _clusters.length; ci < len; ++ci) {
+        double index = ci.toDouble();
+
+        FbxCluster cluster = _clusters[ci];
         for (int xi = 0, numPts = cluster.indexes.length; xi < numPts; ++xi) {
           double weight = cluster.weights[xi];
           int pi = cluster.indexes[xi];
 
           for (int vi = 0, nv = disp.pointMap[pi].length; vi < nv; ++vi) {
-            int pv = disp.pointMap[pi][vi] ~/ 3;
-            int wi = pv * 4 + count[pi];
-            disp.skinIndices[wi] = ci.toDouble();
-            disp.skinWeights[wi] = weight;
+            int pv = (disp.pointMap[pi][vi] ~/ 3) * 4;
+
+            if (count[pi] > 3) {
+              for (int cc = 0; cc < 4; ++cc) {
+                if (disp.skinWeights[pv + cc] < weight) {
+                  disp.skinIndices[pv + cc] = index;
+                  disp.skinWeights[pv + cc] = weight;
+                  break;
+                }
+              }
+            } else {
+              int wi = pv + count[pi];
+              disp.skinIndices[wi] = index;
+              disp.skinWeights[wi] = weight;
+            }
           }
 
           count[pi]++;
@@ -474,7 +486,7 @@ class FbxMesh extends FbxGeometry {
   void _loadTexture(FbxElement e) {
   }
 
-
   List<Vector3> _deformedPoints;
+  List<FbxCluster> _clusters = [];
 }
 

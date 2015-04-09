@@ -1,7 +1,7 @@
 part of fbx_viewer;
 
 class GlSkinningShader extends GlShader {
-  static const int MAX_BONES = 50;
+  static const int MAX_BONES = 60;
 
   static const String vertexSource = """
     precision highp float;
@@ -22,35 +22,28 @@ class GlSkinningShader extends GlShader {
 
       vec4 sp = vec4(0.0, 0.0, 0.0, 0.0);
       vec4 sn = vec4(0.0, 0.0, 0.0, 0.0);
-      int index;
-    
+      int index = 0;
+
       index = int(skinIndices.x);
-      if (index >= 0) { 
-        sp = (joints[index] * p) * skinWeights.x;
-        sn = (joints[index] * n) * skinWeights.x;
-      }
+      sp = (joints[index] * p) * skinWeights.x;
+      sn = (joints[index] * n) * skinWeights.x;
 
       index = int(skinIndices.y);
-      if (index >= 0) {        
-        sp = (joints[index] * p) * skinWeights.y + sp;
-        sn = (joints[index] * n) * skinWeights.y + sn;
-      }
-
+      sp += (joints[index] * p) * skinWeights.y;
+      sn += (joints[index] * n) * skinWeights.y;
+    
       index = int(skinIndices.z);
-      if (index >= 0) {        
-        sp = (joints[index] * p) * skinWeights.z + sp;
-        sn = (joints[index] * n) * skinWeights.z + sn;
-      }
+      sp += (joints[index] * p) * skinWeights.z;
+      sn += (joints[index] * n) * skinWeights.z;
 
       index = int(skinIndices.w);
-      if (index >= 0) {        
-        sp = (joints[index] * p) * skinWeights.w + sp;
-        sn = (joints[index] * n) * skinWeights.w + sn;
-      }
+      sp += (joints[index] * p) * skinWeights.w;
+      sn += (joints[index] * n) * skinWeights.w;
 
       vNormal = normalize(uMVMatrix * vec4(sn.xyz, 0.0)).xyz;
- 
+
       vec4 vPosition = (uMVMatrix * vec4(sp.xyz, 1.0));
+
       gl_Position = uPMatrix * vec4(vPosition.xyz, 1.0);
     }
     """;
@@ -77,13 +70,19 @@ class GlSkinningShader extends GlShader {
 
     _gl.uniformMatrix4fv(_uJoints, false, obj.skinPalette);
 
-    _gl.bindBuffer(GL.ARRAY_BUFFER, obj.skinIndices);
-    _gl.vertexAttribPointer(_skinIndices, 4,
-        GL.RenderingContext.FLOAT, false, 0, 0);
+    if (_skinIndices != -1) {
+      _gl.enableVertexAttribArray(_skinIndices);
+      _gl.bindBuffer(GL.ARRAY_BUFFER, obj.skinIndices);
+      _gl.vertexAttribPointer(_skinIndices, 4,
+          GL.RenderingContext.FLOAT, false, 0, 0);
+    }
 
-    _gl.bindBuffer(GL.ARRAY_BUFFER, obj.skinWeights);
-    _gl.vertexAttribPointer(_skinWeights, 4,
-        GL.RenderingContext.FLOAT, false, 0, 0);
+    if (_skinWeights != -1) {
+      _gl.enableVertexAttribArray(_skinWeights);
+      _gl.bindBuffer(GL.ARRAY_BUFFER, obj.skinWeights);
+      _gl.vertexAttribPointer(_skinWeights, 4,
+          GL.RenderingContext.FLOAT, false, 0, 0);
+    }
   }
 
   GL.UniformLocation _uJoints;
