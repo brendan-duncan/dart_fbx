@@ -41,13 +41,6 @@ class GlShader {
 
   void bind() {
     _gl.useProgram(_shaderProgram);
-
-    if (_aVertexPosition >= 0) {
-      _gl.enableVertexAttribArray(_aVertexPosition);
-    }
-    if (_aVertexNormal >= 0) {
-      _gl.enableVertexAttribArray(_aVertexNormal);
-    }
   }
 
 
@@ -152,11 +145,16 @@ class GlShader {
       _gl.uniformMatrix4fv(_uMVMatrix, false, _mvMatrix.storage);
     }
 
-    _gl.bindBuffer(GL.ARRAY_BUFFER, obj.positionBuffer);
-    _gl.vertexAttribPointer(_aVertexPosition, 3,
-        GL.RenderingContext.FLOAT, false, 0, 0);
+
+    if (_aVertexPosition >= 0) {
+      _gl.enableVertexAttribArray(_aVertexPosition);
+      _gl.bindBuffer(GL.ARRAY_BUFFER, obj.positionBuffer);
+      _gl.vertexAttribPointer(_aVertexPosition, 3,
+          GL.RenderingContext.FLOAT, false, 0, 0);
+    }
 
     if (_aVertexNormal != -1) {
+      _gl.enableVertexAttribArray(_aVertexNormal);
       _gl.bindBuffer(GL.ARRAY_BUFFER, obj.normalBuffer);
       _gl.vertexAttribPointer(_aVertexNormal, 3,
           GL.RenderingContext.FLOAT, false, 0, 0);

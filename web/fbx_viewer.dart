@@ -150,8 +150,6 @@ class FbxViewer {
           }
 
           mesh.generateDisplayMeshes();
-          mesh.generateClusterMap();
-
           if (mesh.display.isEmpty) {
             continue;
           }
@@ -225,9 +223,6 @@ class FbxViewer {
       }
     }
 
-    //_normalShader.bind();
-    //_normalShader.setMatrixUniforms(_mvMatrix, _pMatrix);
-
     _skinningShader.bind();
     _skinningShader.setMatrixUniforms(_mvMatrix, _pMatrix);
 
@@ -240,19 +235,13 @@ class FbxViewer {
 
       obj.skinPalette = mesh.computeSkinPalette(obj.skinPalette);
 
-      //mesh.computeDeformations();
       obj.setPoints(mesh.display[0].points, GL.DYNAMIC_DRAW);
 
       obj.transform = meshNode.evalGlobalTransform();
 
-      //_normalShader.bindGeometry(obj);
-      //_normalShader.draw(GL.TRIANGLES);
-
       _skinningShader.bindGeometry(obj);
       _skinningShader.draw(GL.TRIANGLES);
     }
-
-    //_normalShader.unbind();
 
     _skinningShader.unbind();
   }
