@@ -114,7 +114,7 @@ class FbxViewer {
 
 
     String filename = 'data/knight_2014.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(20.0, 0.0, 20.0),
+    _mvMatrix = makeViewMatrix(new Vector3(10.0, 0.0, 25.0),
                                new Vector3(0.0, 0.0, 0.0),
                                new Vector3(0.0, 1.0, 0.0));
 
@@ -218,7 +218,8 @@ class FbxViewer {
     _gl.enable(GL.CULL_FACE);
 
     if (_scene != null) {
-      _scene.currentFrame += 0.5;
+      //_scene.currentFrame += 0.5;
+      _scene.currentFrame += 0.3;
       if (_scene.currentFrame > _scene.endFrame) {
         _scene.currentFrame = _scene.startFrame;
       }
