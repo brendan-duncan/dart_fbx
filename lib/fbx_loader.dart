@@ -47,7 +47,7 @@ class FbxLoader {
     } else if (e.id == 'Takes') {
       _loadTakes(e, scene);
     } else {
-      print('Unhandled Element ${e.id}');
+      //print('Unhandled Element ${e.id}');
     }
   }
 
@@ -481,7 +481,27 @@ class FbxLoader {
           }
         }
       } else if (c.id == 'Texture') {
-        //_loadTexture(c, scene);
+        int id;
+        String rawName;
+
+        if (c.properties.length == 3) {
+          id = c.getInt(0);
+          rawName = c.properties[1];
+        } else {
+          id = 0;
+          rawName = c.properties[0];
+        }
+
+        String name = _parser.getName(rawName);
+
+        FbxTexture texture = new FbxTexture(id, name, c, scene);
+
+        scene.textures.add(texture);
+        scene.allObjects[rawName] = texture;
+        scene.allObjects[name] = texture;
+        if (id != 0) {
+          scene.allObjects[id.toString()] = texture;
+        }
       } else if (c.id == 'Folder') {
         int id;
         String rawName;
@@ -571,8 +591,30 @@ class FbxLoader {
       } else if (c.id == 'Pose') {
         FbxPose pose = new FbxPose(c.properties[0], c.properties[1], c, scene);
         scene.poses.add(pose);
+      } else if (c.id == 'Video') {
+        int id;
+        String rawName;
+
+        if (c.properties.length == 3) {
+          id = c.getInt(0);
+          rawName = c.properties[1];
+        } else {
+          id = 0;
+          rawName = c.properties[0];
+        }
+
+        String name = _parser.getName(rawName);
+
+        FbxVideo video = new FbxVideo(id, name, c.id, c, scene);
+
+        scene.videos.add(video);
+        scene.allObjects[rawName] = video;
+        scene.allObjects[name] = video;
+        if (id != 0) {
+          scene.allObjects[id.toString()] = video;
+        }
       } else {
-        print('UNKNOWN OBJECT ${c.id}');
+        //print('UNKNOWN OBJECT ${c.id}');
       }
     }
   }

@@ -14,13 +14,14 @@ class FbxScene extends FbxObject {
   FbxAnimEvaluator evaluator;
   List<FbxCamera> cameras = [];
   List<FbxLight> lights = [];
-  List<String> textures = [];
   List<FbxMesh> meshes = [];
   List<FbxDeformer> deformers = [];
   List<FbxMaterial> materials = [];
   List<FbxAnimStack> animationStack = [];
   List<FbxSkeleton> skeletonNodes = [];
   List<FbxPose> poses = [];
+  List<FbxVideo> videos = [];
+  List<FbxTexture> textures = [];
 
   List<FbxNode> rootNodes = [];
   Map<String, FbxObject> allObjects = {};

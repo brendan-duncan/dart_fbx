@@ -140,7 +140,7 @@ class FbxViewer {
         print('LOADED FBX');
 
         _scene = new FbxLoader().load(bytes);
-        //_printScene(_scene);
+        _printScene(_scene);
 
 
         for (FbxMesh mesh in _scene.meshes) {
@@ -223,27 +223,26 @@ class FbxViewer {
       }
     }
 
-    _skinningShader.bind();
-    _skinningShader.setMatrixUniforms(_mvMatrix, _pMatrix);
-
     FbxPose pose = _scene != null ? _scene.getPose(0) : null;
 
     for (int i = 0, len = _objects.length; i < len; ++i) {
       GlObject obj = _objects[i];
       FbxNode meshNode = _meshNodes[i];
       FbxMesh mesh = meshNode.findConnectionsByType('Mesh').first;
+      FbxMaterial material = meshNode.findConnectionsByType('Material').first;
 
       obj.skinPalette = mesh.computeSkinPalette(obj.skinPalette);
-
       obj.setPoints(mesh.display[0].points, GL.DYNAMIC_DRAW);
-
       obj.transform = meshNode.evalGlobalTransform();
+
+      _skinningShader.bind();
+      _skinningShader.setMatrixUniforms(_mvMatrix, _pMatrix);
 
       _skinningShader.bindGeometry(obj);
       _skinningShader.draw(GL.TRIANGLES);
-    }
 
-    _skinningShader.unbind();
+      _skinningShader.unbind();
+    }
   }
 }
 

@@ -51,3 +51,4 @@ part 'scene/fbx_scene.dart';
 part 'scene/fbx_skeleton.dart';
 part 'scene/fbx_skin_deformer.dart';
 part 'scene/fbx_texture.dart';
+part 'scene/fbx_video.dart';
