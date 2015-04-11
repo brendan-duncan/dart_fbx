@@ -14,7 +14,7 @@ class GlLocator {
                                                    0.0, 0.0, 0.0,
                                                    0.0, 0.0, 1.0]);
 
-    _glObject = new GlObject(_gl);
+    _glObject = new GlObject(_gl, null, null);
     _glObject.setPoints(points);
   }
 

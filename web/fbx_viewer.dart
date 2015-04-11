@@ -20,8 +20,6 @@ class FbxViewer {
   int _viewportHeight;
 
   FbxScene _scene;
-  List<FbxNode> _meshNodes = [];
-  List<FbxNode> _limbNodes = [];
 
   Matrix4 _pMatrix;
   Matrix4 _mvMatrix;
@@ -154,7 +152,7 @@ class FbxViewer {
             continue;
           }
 
-          GlObject object = new GlObject(_gl);
+          GlObject object = new GlObject(_gl, meshNode, mesh);
           _objects.add(object);
 
           object.setPoints(mesh.display[0].points, GL.DYNAMIC_DRAW);
@@ -164,7 +162,6 @@ class FbxViewer {
                              mesh.display[0].skinIndices);
 
           object.transform = meshNode.evalGlobalTransform();
-          _meshNodes.add(meshNode);
         }
       }
     });
@@ -216,31 +213,22 @@ class FbxViewer {
     _gl.enable(GL.CULL_FACE);
 
     if (_scene != null) {
-      //_scene.currentFrame += 0.5;
-      _scene.currentFrame += 0.3;
+      _scene.currentFrame += 0.4;
       if (_scene.currentFrame > _scene.endFrame) {
         _scene.currentFrame = _scene.startFrame;
       }
     }
 
-    FbxPose pose = _scene != null ? _scene.getPose(0) : null;
-
     for (int i = 0, len = _objects.length; i < len; ++i) {
       GlObject obj = _objects[i];
-      FbxNode meshNode = _meshNodes[i];
-      FbxMesh mesh = meshNode.findConnectionsByType('Mesh').first;
-      FbxMaterial material = meshNode.findConnectionsByType('Material').first;
+      //FbxMaterial material = obj.node.findConnectionsByType('Material').first;
 
-      obj.skinPalette = mesh.computeSkinPalette(obj.skinPalette);
-      obj.setPoints(mesh.display[0].points, GL.DYNAMIC_DRAW);
-      obj.transform = meshNode.evalGlobalTransform();
+      obj.update();
 
       _skinningShader.bind();
       _skinningShader.setMatrixUniforms(_mvMatrix, _pMatrix);
-
       _skinningShader.bindGeometry(obj);
       _skinningShader.draw(GL.TRIANGLES);
-
       _skinningShader.unbind();
     }
   }

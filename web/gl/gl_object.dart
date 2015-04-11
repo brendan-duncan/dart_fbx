@@ -1,6 +1,9 @@
 part of fbx_viewer;
 
 class GlObject {
+  FbxNode node;
+  FbxMesh mesh;
+
   GL.RenderingContext _gl;
   GL.Buffer positionBuffer;
   GL.Buffer normalBuffer;
@@ -12,7 +15,17 @@ class GlObject {
   GL.Buffer skinIndices;
   Float32List skinPalette;
 
-  GlObject(this._gl);
+  GlObject(this._gl, this.node, this.mesh);
+
+
+  void update() {
+    if (node != null) {
+      transform = node.evalGlobalTransform();
+      skinPalette = mesh.computeSkinPalette(skinPalette);
+      setPoints(mesh.display[0].points, GL.DYNAMIC_DRAW);
+    }
+  }
+
 
   void setPoints(Float32List points, [int mode = GL.STATIC_DRAW]) {
     if (positionBuffer == null) {
