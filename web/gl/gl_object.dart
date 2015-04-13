@@ -47,6 +47,20 @@ class GlObject {
   }
 
 
+  void setUvs(Float32List uvs, [int mode = GL.STATIC_DRAW]) {
+    if (uvs == null) {
+      return;
+    }
+
+    if (uvBuffer == null) {
+      uvBuffer = _gl.createBuffer();
+    }
+
+    _gl.bindBuffer(GL.ARRAY_BUFFER, uvBuffer);
+    _gl.bufferData(GL.ARRAY_BUFFER, uvs, mode);
+  }
+
+
   void setVertices(Uint16List vertices, [int mode = GL.STATIC_DRAW]) {
     if (indexBuffer == null) {
       indexBuffer = _gl.createBuffer();

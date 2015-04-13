@@ -145,7 +145,6 @@ class GlShader {
       _gl.uniformMatrix4fv(_uMVMatrix, false, _mvMatrix.storage);
     }
 
-
     if (_aVertexPosition >= 0) {
       _gl.enableVertexAttribArray(_aVertexPosition);
       _gl.bindBuffer(GL.ARRAY_BUFFER, obj.positionBuffer);

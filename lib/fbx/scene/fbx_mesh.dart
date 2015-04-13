@@ -233,6 +233,7 @@ class FbxMesh extends FbxGeometry {
 
     FbxLayer layer;
     FbxLayerElement<Vector3> normals;
+    FbxLayerElement<Vector2> uvs;
 
     if (layers.isNotEmpty) {
       layer = layers[0];
@@ -241,6 +242,13 @@ class FbxMesh extends FbxGeometry {
     if (layer != null && layer.hasNormals) {
       normals = layer.normals;
       if (normals.mappingMode != FbxMappingMode.ByControlPoint) {
+        splitPolygonVerts = true;
+      }
+    }
+
+    if (layer != null && layer.hasUvs) {
+      uvs = layer.uvs;
+      if (uvs.mappingMode != FbxMappingMode.ByControlPoint) {
         splitPolygonVerts = true;
       }
     }
@@ -263,11 +271,19 @@ class FbxMesh extends FbxGeometry {
         disp.normals = new Float32List(disp.points.length);
       }
 
+      if (uvs != null) {
+        disp.uvs = new Float32List(disp.points.length);
+      }
+
       int pi = 0;
       int ni = 0;
       int ni2 = 0;
+      int ti = 0;
+      int ti2 = 0;
+
       for (FbxPolygon poly in polygons) {
-        for (int vi = 0, len = poly.vertices.length; vi < len; ++vi, ++ni2) {
+        for (int vi = 0, len = poly.vertices.length; vi < len;
+             ++vi, ++ni2, ++ti2) {
           int p1 = poly.vertices[vi];
 
           if (disp.pointMap[p1] == null) {
@@ -279,11 +295,21 @@ class FbxMesh extends FbxGeometry {
           disp.points[pi++] = points[p1].y;
           disp.points[pi++] = points[p1].z;
 
-
           if (normals != null) {
+            if (normals.mappingMode == FbxMappingMode.ByControlPoint) {
+              ni2 = p1;
+            }
             disp.normals[ni++] = normals[ni2].x;
             disp.normals[ni++] = normals[ni2].y;
             disp.normals[ni++] = normals[ni2].z;
+          }
+
+          if (uvs != null) {
+            if (uvs.mappingMode == FbxMappingMode.ByControlPoint) {
+              ti2 = p1;
+            }
+            disp.uvs[ti++] = uvs[ti2].x;
+            disp.uvs[ti++] = uvs[ti2].y;
           }
         }
       }
@@ -301,6 +327,7 @@ class FbxMesh extends FbxGeometry {
     } else {
       disp.numPoints = points.length;
       disp.points = new Float32List(points.length * 3);
+
       for (int xi = 0, pi = 0, len = points.length; xi < len; ++xi) {
         disp.pointMap[xi] = [pi];
 
@@ -316,6 +343,15 @@ class FbxMesh extends FbxGeometry {
           disp.normals[vi++] = normals[ni].x;
           disp.normals[vi++] = normals[ni].y;
           disp.normals[vi++] = normals[ni].z;
+        }
+      }
+
+      if (uvs != null) {
+        disp.uvs = new Float32List(points.length * 2);
+
+        for (int vi = 0, ni = 0, len = uvs.data.length; ni < len; ++ni) {
+          disp.uvs[vi++] = uvs[ni].x;
+          disp.uvs[vi++] = uvs[ni].y;
         }
       }
 

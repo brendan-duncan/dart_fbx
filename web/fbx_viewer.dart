@@ -11,6 +11,7 @@ part 'gl/gl_normal_shader.dart';
 part 'gl/gl_object.dart';
 part 'gl/gl_shader.dart';
 part 'gl/gl_skinning_shader.dart';
+part 'gl/gl_texture.dart';
 
 
 class FbxViewer {
@@ -25,7 +26,8 @@ class FbxViewer {
   Matrix4 _mvMatrix;
   GlShader _colorShader;
   GlShader _normalShader;
-  GlShader _skinningShader;
+  GlSkinningShader _skinningShader;
+  GlTexture _texture;
 
   FbxViewer(CanvasElement canvas) {
     _viewportWidth = canvas.width;
@@ -138,7 +140,7 @@ class FbxViewer {
         print('LOADED FBX');
 
         _scene = new FbxLoader().load(bytes);
-        _printScene(_scene);
+        //_printScene(_scene);
 
 
         for (FbxMesh mesh in _scene.meshes) {
@@ -158,10 +160,21 @@ class FbxViewer {
           object.setPoints(mesh.display[0].points, GL.DYNAMIC_DRAW);
           object.setNormals(mesh.display[0].normals, GL.DYNAMIC_DRAW);
           object.setVertices(mesh.display[0].vertices);
+          object.setUvs(mesh.display[0].uvs);
           object.setSkinning(mesh.display[0].skinWeights,
                              mesh.display[0].skinIndices);
 
           object.transform = meshNode.evalGlobalTransform();
+
+          // TODO this is just a placeholder for testing. Need to implement a
+          // decent material/texture system.
+          FbxMaterial material = meshNode.findConnectionsByType('Material').first;
+          if (material != null) {
+            if (material.diffuseColor.connectedFrom is FbxTexture) {
+              FbxTexture txt = material.diffuseColor.connectedFrom;
+              _texture = new GlTexture(_gl, 'data/' + txt.filename);
+            }
+          }
         }
       }
     });
@@ -221,12 +234,12 @@ class FbxViewer {
 
     for (int i = 0, len = _objects.length; i < len; ++i) {
       GlObject obj = _objects[i];
-      //FbxMaterial material = obj.node.findConnectionsByType('Material').first;
 
       obj.update();
 
       _skinningShader.bind();
       _skinningShader.setMatrixUniforms(_mvMatrix, _pMatrix);
+      _skinningShader.setTexture(_texture);
       _skinningShader.bindGeometry(obj);
       _skinningShader.draw(GL.TRIANGLES);
       _skinningShader.unbind();
