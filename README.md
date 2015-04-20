@@ -1,8 +1,5 @@
 # FBX #
 
-** THIS LIBRARY IS WORK-IN-PROGRESS. THE API IS NOT FINAL, AND IS NOT YET 
-INTENDED FOR GENERAL USE. ** 
-
 ## Introduction ##
 
 A parser for .FBX format in Dart.  An FBX file supports geometry and animation
