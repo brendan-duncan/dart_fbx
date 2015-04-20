@@ -1,11 +1,11 @@
 # FBX #
 
+** THIS LIBRARY IS WORK-IN-PROGRESS. MANY FBX FILES, PARTICLARLY OLDER FBX FILES, WILL LIKELY NOT LOAD CORRECTLY YET AS I"M STILL WORKING ON THE DECODER. **
+
 ## Introduction ##
 
 A parser for .FBX format in Dart.  An FBX file supports geometry and animation
-that can be exported from many common 3d animation programs. 
-
-This supports ASCII and Binary FBX files. 
+that can be exported from many common 3d animation programs.  This supports ASCII and Binary FBX files, and has very limited testing with the 2014 version of the FBX format so far.
 
 ## Background ##
 
