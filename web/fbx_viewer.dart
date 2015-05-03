@@ -14,6 +14,9 @@ part 'gl/gl_skinning_shader.dart';
 part 'gl/gl_texture.dart';
 
 
+/**
+ * An example program demonstrating decoding an Fbx file, displaying it WebGL with GPU skinning and textures.
+ */
 class FbxViewer {
   GL.RenderingContext _gl;
   List<GlObject> _objects = [];
@@ -46,71 +49,6 @@ class FbxViewer {
 
     _pMatrix = makePerspectiveMatrix(radians(54.43),
         _viewportWidth / _viewportHeight, 0.1, 1000.0);
-
-    /*String filename = 'data/cube_ascii_2014.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(3.0, 3.0, -3.0),
-                               new Vector3(0.0, 0.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/cube_anim2_ascii_2014.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(3.0, 3.0, -3.0),
-                               new Vector3(0.0, 0.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/cube_skin_ascii_2014.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(0.0, 0.0, 3.0),
-                               new Vector3(0.0, 0.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/cylinder_ascii_fbx2006.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(0.0, 2.0, -10.0),
-                               new Vector3(0.0, 2.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/cylinder_bin_fbx2014.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(0.0, 2.0, -10.0),
-                                   new Vector3(0.0, 2.0, 0.0),
-                                   new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/cylinder_ascii_fbx2014.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(0.0, 2.0, -10.0),
-                               new Vector3(0.0, 2.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/cylinder_skinned_ascii_fbx2006.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(0.0, 0.0, -20.0),
-                               new Vector3(0.0, 0.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/cylinder_skinned_ascii_fbx2014.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(0.0, 0.0, -20.0),
-                               new Vector3(0.0, 0.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/cylinder_skin_ascii_2014.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(0.0, 0.0, -20.0),
-                               new Vector3(0.0, 0.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/humanoid.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(-30.0, 100.0, 400.0),
-                               new Vector3(-30.0, 100.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/humanoid_ascii.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(-30.0, 100.0, 400.0),
-                               new Vector3(-30.0, 100.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/humanoid_2006_ascii.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(-30.0, 100.0, 400.0),
-                               new Vector3(-30.0, 100.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));*/
-
-    /*String filename = 'data/knight.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(20.0, 0.0, 20.0),
-                                   new Vector3(0.0, 0.0, 0.0),
-                                   new Vector3(0.0, 1.0, 0.0));*/
 
 
     String filename = 'data/knight_2014.fbx';

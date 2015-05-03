@@ -2,8 +2,8 @@ name: fbx
 version: 0.0.1
 description: An opensource decoder for the FBX 3d geometry and animation format.
 dependencies:
-  archive: any
-  vector_math: any
+  archive: '>= 1.0.19 <1.1.0'
+  vector_math: '>= 1.4.3 <2.0.0'
 dev_dependencies:
   browser: any
-  unittest: any
+  unittest: '>=0.12.0 <1.0.0'
