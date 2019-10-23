@@ -25,8 +25,14 @@ class FbxAnimCurve extends FbxObject {
       } else if (c.id == 'KeyVer') {
         //version = c.getInt(0);
       } else if (c.id == 'KeyTime') {
+        if (c.children.isEmpty) {
+          continue;
+        }
         keyTime = c.children[0].properties;
       } else if (c.id == 'KeyValueFloat') {
+        if (c.children.isEmpty) {
+          continue;
+        }
         keyValue = c.children[0].properties;
       } else if (c.id == 'KeyAttrFlags') {
 

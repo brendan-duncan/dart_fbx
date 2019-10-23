@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 /// Copyright (C) 2015 Brendan Duncan. All rights reserved.
 import '../fbx_element.dart';
 import 'fbx_node.dart';
@@ -20,11 +22,12 @@ class FbxPose extends FbxObject {
 
         for (FbxElement c2 in c.children) {
           if (c2.id == 'Node') {
-            nodeName = c2.properties[0];
+            nodeName = c2.properties[0].toString();
           } else if (c2.id == 'Matrix') {
             var p = (c2.properties.length == 16) ? c2.properties
                     : (c2.children.length == 1 &&
                        c2.children[0].properties.length == 16) ? c2.children[0].properties
+                    : (c2.properties.length == 1 && c2.properties[0] is List) ? c2.properties[0] as List
                     : null;
             if (p != null) {
               matrix = Matrix4.zero();

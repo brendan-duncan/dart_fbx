@@ -40,7 +40,6 @@ class FbxObject {
     return null;
   }
 
-
   int get numConnectedFrom => connectedFrom.length;
 
   FbxObject getConnectedFrom(int index) =>
@@ -53,11 +52,10 @@ class FbxObject {
         (index >= 0 && index < connectedTo.length)
         ? connectedTo[index] : null;
 
-
   List<FbxObject> findConnectionsByType(String type,
                                         [List<FbxObject> connections]) {
     if (connections == null) {
-      connections = [];
+      connections = List<FbxObject>();
     }
 
     for (FbxObject obj in connectedTo) {
@@ -69,24 +67,19 @@ class FbxObject {
     return connections;
   }
 
-
   void connectTo(FbxObject object) {
     connectedTo.add(object);
     object.connectedFrom.add(this);
   }
-
 
   void connectToProperty(String propertyName, FbxObject object) {
     FbxProperty property = addProperty(propertyName);
     property.connectedFrom = object;
   }
 
-
   Iterable<String> propertyNames() => properties.keys;
 
-
   bool hasProperty(String name) => properties.containsKey(name);
-
 
   FbxProperty addProperty(String name, [defaultValue]) {
     if (!properties.containsKey(name)) {
@@ -94,7 +87,6 @@ class FbxObject {
     }
     return properties[name];
   }
-
 
   FbxProperty setProperty(String name, value) {
     if (!properties.containsKey(name)) {
@@ -105,13 +97,12 @@ class FbxObject {
     return properties[name];
   }
 
-
   getProperty(String name) =>
       properties.containsKey(name) ? properties[name].value : null;
 
   String toString() => '$name ($type)';
 
-  double toDouble(x) => x is String ? double.parse(x) : x.toDouble();
+  double toDouble(x) => x is double ? x : x is bool ? (x ? 1.0 : 0.0) : x is String ? double.parse(x) : x.toDouble();
 
-  int toInt(x) => x is String ? int.parse(x) : x.toInt();
+  int toInt(x) => x is int ? x : x is bool ? (x ? 1 : 0) : x is String ? int.parse(x) : x.toInt();
 }

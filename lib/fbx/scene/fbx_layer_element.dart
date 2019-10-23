@@ -8,6 +8,8 @@ class FbxLayerElement<T> {
   List<int> indexArray;
   List<T> data;
 
+  int get length => data.length;
+
   T operator[](int index) => data[index];
 
   operator[]=(int index, T v) => data[index] = v;

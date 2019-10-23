@@ -21,7 +21,6 @@ class FbxAsciiParser extends FbxParser {
     return true;
   }
 
-
   FbxAsciiParser(InputBuffer input) {
     int fp = input.offset;
     String header = input.readString(FILE_HEADER.length);
@@ -33,7 +32,6 @@ class FbxAsciiParser extends FbxParser {
 
     _input = input;
   }
-
 
   FbxElement nextElement() {
     if (_input == null) {
@@ -89,11 +87,9 @@ class FbxAsciiParser extends FbxParser {
     return elem;
   }
 
-
   String sceneName() => 'Model::Scene';
 
   String getName(String rawName) => rawName.split('::').last;
-
 
   String _nextToken(InputBuffer input, {bool peek: false}) {
     _skipWhitespace(input);
@@ -140,7 +136,6 @@ class FbxAsciiParser extends FbxParser {
     return token;
   }
 
-
   String _readString(InputBuffer input) {
     int sp = input.offset;
     while (!input.isEOS) {
@@ -156,7 +151,6 @@ class FbxAsciiParser extends FbxParser {
     return string;
   }
 
-
   bool _isAlphaNumeric(int c) {
     return (c >= TK_a && c <= TK_z) ||
            (c >= TK_A && c <= TK_Z) ||
@@ -168,7 +162,6 @@ class FbxAsciiParser extends FbxParser {
            (c == TK_BAR) ||
            (c == TK_UNDERSCORE);
   }
-
 
   void _skipWhitespace(InputBuffer input) {
     while (!input.isEOS) {

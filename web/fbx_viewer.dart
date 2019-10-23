@@ -45,16 +45,14 @@ class FbxViewer {
 
     print('LOADING FBX');
 
-
     _pMatrix = makePerspectiveMatrix(radians(54.43),
         _viewportWidth / _viewportHeight, 0.1, 1000.0);
 
-
     String filename = 'data/knight_2014.fbx';
+    //String filename = 'data/cube_anim_ascii_2014.fbx';
     _mvMatrix = makeViewMatrix(Vector3(10.0, 0.0, 25.0),
                                Vector3(0.0, 0.0, 0.0),
                                Vector3(0.0, 1.0, 0.0));
-
 
     var req = HttpRequest();
     req.open('GET', filename);
@@ -74,12 +72,12 @@ class FbxViewer {
 
         // Convert the text to binary byte list.
         List<int> bytes = Uint8List.view(req.response);
-        print('LOADED FBX');
+        print('LOADED FBX: ${bytes.length} bytes');
 
         _scene = FbxLoader().load(bytes);
         //_printScene(_scene);
 
-
+        print('LOAD FINISHED');
         for (FbxMesh mesh in _scene.meshes) {
           FbxNode meshNode = mesh.getParentNode();
           if (meshNode == null) {

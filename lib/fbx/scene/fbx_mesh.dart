@@ -64,12 +64,13 @@ class FbxMesh extends FbxGeometry {
   }
 
   List<FbxCluster> _getClusters() {
-    var clusters = [];
+    List<FbxCluster> clusters = [];
     List<FbxObject> skins = findConnectionsByType('Skin');
     for (FbxSkinDeformer skin in skins) {
-      List l = [];
+      List<FbxCluster> l = [];
       skin.findConnectionsByType('Cluster', l);
       for (var c in l) {
+        
         if (c.indexes != null && c.weights != null) {
           clusters.add(c);
         }
@@ -77,7 +78,6 @@ class FbxMesh extends FbxGeometry {
     }
     return clusters;
   }
-
 
   bool hasDeformedPoints() => _deformedPoints != null;
 
@@ -88,7 +88,6 @@ class FbxMesh extends FbxGeometry {
     return _deformedPoints;
   }
 
-
   void computeDeformations() {
     FbxNode meshNode = getConnectedFrom(0);
     if (meshNode == null) {
@@ -97,7 +96,6 @@ class FbxMesh extends FbxGeometry {
     computeLinearBlendSkinning(meshNode);
     updateDisplayMesh();
   }
-
 
   void updateDisplayMesh() {
     List<Vector3> pts = _deformedPoints != null ? _deformedPoints : points;
@@ -115,7 +113,6 @@ class FbxMesh extends FbxGeometry {
       }
     }
   }
-
 
   Float32List computeSkinPalette([Float32List data]) {
     FbxNode meshNode = getConnectedFrom(0);
@@ -140,7 +137,6 @@ class FbxMesh extends FbxGeometry {
 
     return data;
   }
-
 
   void computeLinearBlendSkinning(FbxNode meshNode) {
     List<Vector3> outPoints = deformedPoints;
@@ -182,7 +178,6 @@ class FbxMesh extends FbxGeometry {
     }
   }
 
-
   Matrix4 _getClusterMatrix(FbxNode meshNode, FbxCluster cluster,
                             FbxPose pose) {
     FbxNode joint = cluster.getLink();
@@ -206,7 +201,6 @@ class FbxMesh extends FbxGeometry {
     return vertexTransform;
   }
 
-
   void generateClusterMap() {
     clusterMap = List(points.length);
 
@@ -224,7 +218,6 @@ class FbxMesh extends FbxGeometry {
       }
     }
   }
-
 
   void generateDisplayMeshes() {
     display = [];
@@ -318,8 +311,10 @@ class FbxMesh extends FbxGeometry {
             if (uvs.mappingMode == FbxMappingMode.ByControlPoint) {
               ti2 = p1;
             }
-            disp.uvs[ti++] = uvs[ti2].x;
-            disp.uvs[ti++] = uvs[ti2].y;
+            if (ti2 < uvs.length) {
+              disp.uvs[ti++] = uvs[ti2].x;
+              disp.uvs[ti++] = uvs[ti2].y;
+            }
           }
         }
       }
@@ -541,4 +536,3 @@ class FbxMesh extends FbxGeometry {
   List<Vector3> _deformedPoints;
   List<FbxCluster> _clusters = [];
 }
-

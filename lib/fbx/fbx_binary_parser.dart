@@ -41,7 +41,6 @@ class FbxBinaryParser extends FbxParser {
     return true;
   }
 
-
   FbxBinaryParser(InputBuffer input) {
     int fp = input.offset;
     String header = input.readString(FILE_HEADER.length);
@@ -56,7 +55,6 @@ class FbxBinaryParser extends FbxParser {
     _input.skip(2); // \x1a\x00, not sure
     _input.skip(4); // file version
   }
-
 
   FbxElement nextElement() {
     if (_input == null) {
@@ -98,12 +96,10 @@ class FbxBinaryParser extends FbxParser {
     return elem;
   }
 
-
   String sceneName() => 'Scene${NAME_SEP}Model';
 
   String getName(String rawName) =>
       rawName.substring(0, rawName.codeUnits.indexOf(0));
-
 
   _readData(InputBuffer input, int s) {
     switch (s) {
@@ -124,7 +120,8 @@ class FbxBinaryParser extends FbxParser {
       case TYPE_BYTES:
         return input.readBytes(input.readUint32()).toUint8List();
       case TYPE_STRING:
-        return input.readString(input.readUint32());
+        var st = input.readString(input.readUint32());
+        return st;
       case TYPE_ARRAY_FLOAT32:
         return _readArray(input, s, 4);
       case TYPE_ARRAY_FLOAT64:
@@ -154,8 +151,10 @@ class FbxBinaryParser extends FbxParser {
     Uint8List data;
     if (encoding == ZLIB_COMPRESSED) {
       data = ZLibDecoder().decodeBytes(bytes.toUint8List());
-    } else {
+    } else if (encoding == UNCOMPRESSED) {
       data = bytes.toUint8List();
+    } else {
+      throw Exception('Invalid Array Encoding $encoding');
     }
 
     if (length * arrayStride != data.length) {
@@ -168,15 +167,16 @@ class FbxBinaryParser extends FbxParser {
       case TYPE_ARRAY_BOOL:
         return data;
       case TYPE_ARRAY_INT16:
-        return data.buffer.asInt64List(0, length);
+        return data.buffer.asInt64List(0, length).toList(growable: false);
       case TYPE_ARRAY_INT32:
-        return data.buffer.asInt32List(0, length);
+        return data.buffer.asInt32List(0, length).toList(growable: false);
       case TYPE_ARRAY_INT64:
-        return data.buffer.asInt64List(0, length);
+        return data.buffer.asInt64List(0, length).toList(growable: false);
       case TYPE_ARRAY_FLOAT32:
-        return data.buffer.asFloat32List(0, length);
+        return data.buffer.asFloat32List(0, length).toList(growable: false);
       case TYPE_ARRAY_FLOAT64:
-        return data.buffer.asFloat64List(0, length);
+        var da = data.buffer.asFloat64List(0, length).toList(growable: false);
+        return da;
     }
 
     return null;

@@ -21,7 +21,7 @@ class FbxElement {
 
   double getDouble(int index) => toDouble(properties[index]);
 
-  double toDouble(x) => x is String ? double.parse(x) : x.toDouble();
+  double toDouble(x) => x is String ? double.parse(x) : x is bool ? (x ? 1.0 : 0.0) : x.toDouble();
 
-  int toInt(x) => x is String ? int.parse(x) : x.toInt();
+  int toInt(x) => x is String ? int.parse(x) : x is bool ? (x ? 1 : 0) : x.toInt();
 }

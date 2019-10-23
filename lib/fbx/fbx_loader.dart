@@ -188,6 +188,10 @@ class FbxLoader {
           animCurve.keys.add(FbxAnimKey(time, value,
               FbxAnimKey.INTERPOLATION_LINEAR));
 
+          if ((pi + 2) >= c.properties.length) {
+            break;
+          }
+
           String type = c.properties[pi + 2].toString();
           int keyType = FbxAnimKey.INTERPOLATION_LINEAR;
 
@@ -595,13 +599,13 @@ class FbxLoader {
           scene.allObjects[id.toString()] = node;
         }
       } else if (c.id == 'GlobalSettings') {
-        FbxGlobalSettings node = FbxGlobalSettings(c, scene);
+        var node = FbxGlobalSettings(c, scene);
         scene.globalSettings = node;
       } else if (c.id == 'SceneInfo') {
-        FbxObject node = FbxObject(0, 'SceneInfo', c.id, c, scene);
+        var node = FbxObject(0, 'SceneInfo', c.id, c, scene);
         scene.sceneInfo = node;
       } else if (c.id == 'Pose') {
-        FbxPose pose = FbxPose(c.properties[0], c.properties[1], c, scene);
+        var pose = FbxPose(c.properties[0].toString(), c.properties[1], c, scene);
         scene.poses.add(pose);
       } else if (c.id == 'Video') {
         int id;
