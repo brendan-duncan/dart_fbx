@@ -1,7 +1,4 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
 
 enum FbxMappingMode {
   /// The mapping is undetermined.
@@ -21,8 +18,7 @@ enum FbxMappingMode {
   AllSame
 }
 
-
-FbxMappingMode _stringToMappingMode(String id) {
+FbxMappingMode stringToMappingMode(String id) {
   id = id.toLowerCase();
   if (id == 'bycontrolpoint' || id == 'byvertex' || id == 'byvertice') {
     return FbxMappingMode.ByControlPoint;

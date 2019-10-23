@@ -1,7 +1,6 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import 'fbx_layer_element.dart';
+import 'package:vector_math/vector_math.dart';
 
 class FbxLayer {
   bool get hasNormals => _normals != null;

@@ -1,7 +1,9 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../fbx_element.dart';
+import 'fbx_object.dart';
+import 'fbx_property.dart';
+import 'fbx_scene.dart';
+import 'package:vector_math/vector_math.dart';
 
 class FbxAnimLayer extends FbxObject {
   static const int BLEND_ADDITIVE = 0;

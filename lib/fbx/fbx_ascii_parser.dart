@@ -1,11 +1,9 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import 'fbx_parser.dart';
+import 'fbx_element.dart';
+import 'input_buffer.dart';
 
-/**
- * Decodes an ASCII FBX file.
- */
+/// Decodes an ASCII FBX file.
 class FbxAsciiParser extends FbxParser {
   static const FILE_HEADER = '; FBX';
 

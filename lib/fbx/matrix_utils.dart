@@ -1,26 +1,22 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import 'package:vector_math/vector_math.dart';
+import 'dart:math';
 
-
-Matrix4 _inverseMat(Matrix4 m) {
+Matrix4 inverseMat(Matrix4 m) {
   Matrix4 i = new Matrix4.copy(m);
   i.invert();
   return i;
 }
 
-
-void _scaleMat(Matrix4 mat, double s) {
+void scaleMat(Matrix4 mat, double s) {
   for (int i = 0; i < 16; ++i) {
     mat.storage[i] *= s;
   }
 }
 
-
-/// TODO vector_math Matrix4.rotateY has a bug. Replace this version with the
-/// vector_math version as soon as it gets fixed.
-void _rotateY(Matrix4 mat, double angle) {
+// TODO vector_math Matrix4.rotateY has a bug. Replace this version with the
+// vector_math version as soon as it gets fixed.
+void rotateY(Matrix4 mat, double angle) {
   double cosAngle = cos(angle);
   double sinAngle = sin(angle);
   var t1 = mat.storage[0] * cosAngle - mat.storage[8] * sinAngle;

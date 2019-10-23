@@ -2,8 +2,9 @@ library fbx_viewer;
 
 import 'dart:html';
 import 'dart:typed_data';
-import 'dart:web_gl' as GL;
+import 'dart:web_gl';
 import 'package:fbx/fbx.dart';
+import 'package:vector_math/vector_math.dart';
 
 part 'gl/gl_color_shader.dart';
 part 'gl/gl_locator.dart';
@@ -13,12 +14,10 @@ part 'gl/gl_shader.dart';
 part 'gl/gl_skinning_shader.dart';
 part 'gl/gl_texture.dart';
 
-
-/**
- * An example program demonstrating decoding an Fbx file, displaying it WebGL with GPU skinning and textures.
- */
+/// An example program demonstrating decoding an Fbx file, displaying it WebGL
+/// with GPU skinning and textures.
 class FbxViewer {
-  GL.RenderingContext _gl;
+  RenderingContext _gl;
   List<GlObject> _objects = [];
   int _viewportWidth;
   int _viewportHeight;
@@ -42,7 +41,7 @@ class FbxViewer {
     _skinningShader = new GlSkinningShader(_gl);
 
     _gl.clearColor(0.3, 0.5, 0.7, 1.0);
-    _gl.enable(GL.DEPTH_TEST);
+    _gl.enable(WebGL.DEPTH_TEST);
 
     print('LOADING FBX');
 
@@ -95,8 +94,8 @@ class FbxViewer {
           GlObject object = new GlObject(_gl, meshNode, mesh);
           _objects.add(object);
 
-          object.setPoints(mesh.display[0].points, GL.DYNAMIC_DRAW);
-          object.setNormals(mesh.display[0].normals, GL.DYNAMIC_DRAW);
+          object.setPoints(mesh.display[0].points, WebGL.DYNAMIC_DRAW);
+          object.setNormals(mesh.display[0].normals, WebGL.DYNAMIC_DRAW);
           object.setVertices(mesh.display[0].vertices);
           object.setUvs(mesh.display[0].uvs);
           object.setSkinning(mesh.display[0].skinWeights,
@@ -153,15 +152,14 @@ class FbxViewer {
     }
   }
 
-
-  void render([double time=0.0]) {
+  void render([num time=0]) {
     window.requestAnimationFrame(render);
 
     _gl.viewport(0, 0, _viewportWidth, _viewportHeight);
-    _gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
-    _gl.enable(GL.BLEND);
-    _gl.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
-    _gl.enable(GL.CULL_FACE);
+    _gl.clear(WebGL.COLOR_BUFFER_BIT | WebGL.DEPTH_BUFFER_BIT);
+    _gl.enable(WebGL.BLEND);
+    _gl.blendFunc(WebGL.SRC_ALPHA, WebGL.ONE_MINUS_SRC_ALPHA);
+    _gl.enable(WebGL.CULL_FACE);
 
     if (_scene != null) {
       _scene.currentFrame += 0.4;
@@ -179,12 +177,11 @@ class FbxViewer {
       _skinningShader.setMatrixUniforms(_mvMatrix, _pMatrix);
       _skinningShader.setTexture(_texture);
       _skinningShader.bindGeometry(obj);
-      _skinningShader.draw(GL.TRIANGLES);
+      _skinningShader.draw(WebGL.TRIANGLES);
       _skinningShader.unbind();
     }
   }
 }
-
 
 void main() {
   FbxViewer viewer = new FbxViewer(document.querySelector('#fbxviewer'));

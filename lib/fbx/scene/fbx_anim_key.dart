@@ -1,8 +1,4 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
-
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
 
 class FbxAnimKey {
   static const int INTERPOLATION_CONSTANT = 0;

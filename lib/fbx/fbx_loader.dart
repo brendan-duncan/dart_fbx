@@ -1,12 +1,32 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import 'input_buffer.dart';
+import 'fbx_element.dart';
+import 'fbx_ascii_parser.dart';
+import 'fbx_binary_parser.dart';
+import 'fbx_parser.dart';
+import 'scene/fbx_anim_curve.dart';
+import 'scene/fbx_anim_curve_node.dart';
+import 'scene/fbx_anim_layer.dart';
+import 'scene/fbx_anim_stack.dart';
+import 'scene/fbx_anim_key.dart';
+import 'scene/fbx_camera.dart';
+import 'scene/fbx_cluster.dart';
+import 'scene/fbx_deformer.dart';
+import 'scene/fbx_light.dart';
+import 'scene/fbx_material.dart';
+import 'scene/fbx_mesh.dart';
+import 'scene/fbx_node.dart';
+import 'scene/fbx_node_attribute.dart';
+import 'scene/fbx_object.dart';
+import 'scene/fbx_pose.dart';
+import 'scene/fbx_scene.dart';
+import 'scene/fbx_skeleton.dart';
+import 'scene/fbx_skin_deformer.dart';
+import 'scene/fbx_texture.dart';
+import 'scene/fbx_video.dart';
+import 'scene/fbx_global_settings.dart';
 
-
-/**
- * Decodes an FBX file into an [FbxScene] structure.
- */
+/// Decodes an FBX file into an [FbxScene] structure.
 class FbxLoader {
   FbxScene load(List<int> bytes) {
     InputBuffer input = new InputBuffer(bytes);
@@ -32,7 +52,6 @@ class FbxLoader {
     return scene;
   }
 
-
   void _loadRootElement(FbxElement e, FbxScene scene) {
     if (e.id == 'FBXHeaderExtension') {
       _loadHeaderExtension(e, scene);
@@ -51,7 +70,6 @@ class FbxLoader {
     }
   }
 
-
   void _loadTakes(FbxElement e, FbxScene scene) {
     String currentTake;
     for (FbxElement c in e.children) {
@@ -67,7 +85,6 @@ class FbxLoader {
       }
     }
   }
-
 
   // Older FBX versions store animation in 'Takes'
   void _loadTake(FbxElement e, FbxScene scene) {
@@ -89,7 +106,6 @@ class FbxLoader {
       }
     }
   }
-
 
   void _loadTakeChannel(FbxElement c, FbxObject obj, FbxScene scene) {
     if (c.properties[0] == 'Transform') {
@@ -160,7 +176,6 @@ class FbxLoader {
     }
   }
 
-
   void _loadTakeCurve(FbxElement e, FbxAnimCurve animCurve) {
     for (FbxElement c in e.children) {
       if (c.id == 'Default') {
@@ -196,7 +211,6 @@ class FbxLoader {
     }
   }
 
-
   /// Older versions of fbx connect deformers to the transform instead of
   /// the mesh.
   void _fixConnections(FbxScene scene) {
@@ -217,7 +231,6 @@ class FbxLoader {
       }
     }
   }
-
 
   void _loadConnections(FbxElement e, FbxScene scene) {
     final SCENE = _parser.sceneName();
@@ -269,7 +282,6 @@ class FbxLoader {
       }
     }
   }
-
 
   void _loadObjects(FbxElement e, FbxScene scene) {
     for (FbxElement c in e.children) {

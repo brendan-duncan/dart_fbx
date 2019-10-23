@@ -4,50 +4,46 @@ class GlObject {
   FbxNode node;
   FbxMesh mesh;
 
-  GL.RenderingContext _gl;
-  GL.Buffer positionBuffer;
-  GL.Buffer normalBuffer;
-  GL.Buffer uvBuffer;
-  GL.Buffer indexBuffer;
+  RenderingContext _gl;
+  Buffer positionBuffer;
+  Buffer normalBuffer;
+  Buffer uvBuffer;
+  Buffer indexBuffer;
   int indexCount;
   Matrix4 transform;
-  GL.Buffer skinWeights;
-  GL.Buffer skinIndices;
+  Buffer skinWeights;
+  Buffer skinIndices;
   Float32List skinPalette;
 
   GlObject(this._gl, this.node, this.mesh);
-
 
   void update() {
     if (node != null) {
       transform = node.evalGlobalTransform();
       skinPalette = mesh.computeSkinPalette(skinPalette);
-      setPoints(mesh.display[0].points, GL.DYNAMIC_DRAW);
+      setPoints(mesh.display[0].points, WebGL.DYNAMIC_DRAW);
     }
   }
 
-
-  void setPoints(Float32List points, [int mode = GL.STATIC_DRAW]) {
+  void setPoints(Float32List points, [int mode = WebGL.STATIC_DRAW]) {
     if (positionBuffer == null) {
       positionBuffer = _gl.createBuffer();
     }
 
-    _gl.bindBuffer(GL.ARRAY_BUFFER, positionBuffer);
-    _gl.bufferData(GL.ARRAY_BUFFER, points, mode);
+    _gl.bindBuffer(WebGL.ARRAY_BUFFER, positionBuffer);
+    _gl.bufferData(WebGL.ARRAY_BUFFER, points, mode);
   }
 
-
-  void setNormals(Float32List normals, [int mode = GL.STATIC_DRAW]) {
+  void setNormals(Float32List normals, [int mode = WebGL.STATIC_DRAW]) {
     if (normalBuffer == null) {
       normalBuffer = _gl.createBuffer();
     }
 
-    _gl.bindBuffer(GL.ARRAY_BUFFER, normalBuffer);
-    _gl.bufferData(GL.ARRAY_BUFFER, normals, mode);
+    _gl.bindBuffer(WebGL.ARRAY_BUFFER, normalBuffer);
+    _gl.bufferData(WebGL.ARRAY_BUFFER, normals, mode);
   }
 
-
-  void setUvs(Float32List uvs, [int mode = GL.STATIC_DRAW]) {
+  void setUvs(Float32List uvs, [int mode = WebGL.STATIC_DRAW]) {
     if (uvs == null) {
       return;
     }
@@ -56,22 +52,20 @@ class GlObject {
       uvBuffer = _gl.createBuffer();
     }
 
-    _gl.bindBuffer(GL.ARRAY_BUFFER, uvBuffer);
-    _gl.bufferData(GL.ARRAY_BUFFER, uvs, mode);
+    _gl.bindBuffer(WebGL.ARRAY_BUFFER, uvBuffer);
+    _gl.bufferData(WebGL.ARRAY_BUFFER, uvs, mode);
   }
 
-
-  void setVertices(Uint16List vertices, [int mode = GL.STATIC_DRAW]) {
+  void setVertices(Uint16List vertices, [int mode = WebGL.STATIC_DRAW]) {
     if (indexBuffer == null) {
       indexBuffer = _gl.createBuffer();
     }
 
-    _gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    _gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, vertices, mode);
+    _gl.bindBuffer(WebGL.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    _gl.bufferData(WebGL.ELEMENT_ARRAY_BUFFER, vertices, mode);
 
     indexCount = vertices.length;
   }
-
 
   void setSkinning(Float32List weights, Float32List indices) {
     if (skinWeights == null) {
@@ -79,10 +73,10 @@ class GlObject {
       skinIndices = _gl.createBuffer();
     }
 
-    _gl.bindBuffer(GL.ARRAY_BUFFER, skinWeights);
-    _gl.bufferData(GL.ARRAY_BUFFER, weights, GL.STATIC_DRAW);
+    _gl.bindBuffer(WebGL.ARRAY_BUFFER, skinWeights);
+    _gl.bufferData(WebGL.ARRAY_BUFFER, weights, WebGL.STATIC_DRAW);
 
-    _gl.bindBuffer(GL.ARRAY_BUFFER, skinIndices);
-    _gl.bufferData(GL.ARRAY_BUFFER, indices, GL.STATIC_DRAW);
+    _gl.bindBuffer(WebGL.ARRAY_BUFFER, skinIndices);
+    _gl.bufferData(WebGL.ARRAY_BUFFER, indices, WebGL.STATIC_DRAW);
   }
 }

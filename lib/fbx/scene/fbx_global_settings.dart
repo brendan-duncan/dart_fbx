@@ -1,8 +1,10 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
-
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../fbx_element.dart';
+import 'fbx_frame_rate.dart';
+import 'fbx_object.dart';
+import 'fbx_property.dart';
+import 'fbx_scene.dart';
+import 'package:vector_math/vector_math.dart';
 
 class FbxGlobalSettings extends FbxObject {
   FbxProperty upAxis;
@@ -23,7 +25,6 @@ class FbxGlobalSettings extends FbxObject {
   FbxProperty timeSpanStart;
   FbxProperty timeSpanStop;
   FbxProperty customFrameRate;
-
 
   FbxGlobalSettings(FbxElement element, FbxScene scene)
     : super(0, '', 'GlobalSettings', element, scene) {

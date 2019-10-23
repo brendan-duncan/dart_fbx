@@ -1,8 +1,10 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
-
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../fbx_element.dart';
+import 'fbx_deformer.dart';
+import 'fbx_node.dart';
+import 'fbx_scene.dart';
+import 'dart:typed_data';
+import 'package:vector_math/vector_math.dart';
 
 class FbxCluster extends FbxDeformer {
   static const int NORMALIZE = 0;
@@ -26,22 +28,22 @@ class FbxCluster extends FbxDeformer {
       if (c.id == 'Indexes') {
         indexes = new Uint32List(p.length);
         for (int i = 0, len = p.length; i < len; ++i) {
-          indexes[i] = _int(p[i]);
+          indexes[i] = toInt(p[i]);
         }
       } else if (c.id == 'Weights') {
         weights = new Float32List(p.length);
         for (int i = 0, len = p.length; i < len; ++i) {
-          weights[i] = _double(p[i]);
+          weights[i] = toDouble(p[i]);
         }
       } else if (c.id == 'Transform') {
         transform = new Matrix4.identity();
         for (int i = 0, len = p.length; i < len; ++i) {
-          transform.storage[i] = _double(p[i]);
+          transform.storage[i] = toDouble(p[i]);
         }
       } else if (c.id == 'TransformLink') {
         transformLink = new Matrix4.identity();
         for (int i = 0, len = p.length; i < len; ++i) {
-          transformLink.storage[i] = _double(p[i]);
+          transformLink.storage[i] = toDouble(p[i]);
         }
       }
     }

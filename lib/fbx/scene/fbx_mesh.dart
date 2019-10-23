@@ -1,8 +1,22 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
-
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../fbx_element.dart';
+import '../matrix_utils.dart';
+import 'fbx_cluster.dart';
+import 'fbx_display_mesh.dart';
+import 'fbx_edge.dart';
+import 'fbx_geometry.dart';
+import 'fbx_layer.dart';
+import 'fbx_layer_element.dart';
+import 'fbx_mapping_mode.dart';
+import 'fbx_node.dart';
+import 'fbx_object.dart';
+import 'fbx_polygon.dart';
+import 'fbx_pose.dart';
+import 'fbx_reference_mode.dart';
+import 'fbx_scene.dart';
+import 'fbx_skin_deformer.dart';
+import 'package:vector_math/vector_math.dart';
+import 'dart:typed_data';
 
 class FbxMesh extends FbxGeometry {
   List<Vector3> points;
@@ -12,7 +26,6 @@ class FbxMesh extends FbxGeometry {
   List<FbxLayer> layers = [];
   List<FbxDisplayMesh> display = [];
   List clusterMap = [];
-
 
   FbxMesh(int id, FbxElement element, FbxScene scene)
     : super(id, '', 'Mesh', element, scene) {
@@ -34,7 +47,6 @@ class FbxMesh extends FbxGeometry {
     }
   }
 
-
   FbxLayer getLayer(int index) {
     while (layers.length <= index) {
       layers.add(null);
@@ -47,11 +59,9 @@ class FbxMesh extends FbxGeometry {
     return layers[index];
   }
 
-
   List<FbxSkinDeformer> get skinDeformer {
     return findConnectionsByType('Skin');
   }
-
 
   List<FbxCluster> _getClusters() {
     var clusters = [];
@@ -181,13 +191,13 @@ class FbxMesh extends FbxGeometry {
 
     Matrix4 refGlobalCurrentPos = meshNode.evalGlobalTransform();
 
-    Matrix4 clusterGlobalInitPos = _inverseMat(cluster.transformLink);
+    Matrix4 clusterGlobalInitPos = inverseMat(cluster.transformLink);
 
     Matrix4 clusterGlobalCurrentPos = joint.evalGlobalTransform();
 
     Matrix4 clusterRelativeInitPos = clusterGlobalInitPos * refGlobalInitPos;
 
-    Matrix4 clusterRelativeCurrentPosInverse = _inverseMat(refGlobalCurrentPos)
+    Matrix4 clusterRelativeCurrentPosInverse = inverseMat(refGlobalCurrentPos)
                                                * clusterGlobalCurrentPos;
 
     Matrix4 vertexTransform = clusterRelativeCurrentPosInverse
@@ -421,8 +431,8 @@ class FbxMesh extends FbxGeometry {
     points = new List(p.length ~/ 3);
 
     for (int i = 0, j = 0, len = p.length; i < len; i += 3) {
-      points[j++] = new Vector3(_double(p[i]), _double(p[i + 1]),
-                                _double(p[i + 2]));
+      points[j++] = new Vector3(toDouble(p[i]), toDouble(p[i + 1]),
+                                toDouble(p[i + 2]));
     }
   }
 
@@ -438,7 +448,7 @@ class FbxMesh extends FbxGeometry {
 
     // Triangulate the mesh while we're parsing it.
     for (int i = 0, len = p.length; i < len; ++i) {
-      int vi = _int(p[i]);
+      int vi = toInt(p[i]);
 
       // negative index indicates the end of a polygon
       if (vi < 0) {
@@ -448,7 +458,7 @@ class FbxMesh extends FbxGeometry {
         polygons.add(poly);
 
         for (int xi = polygonStart; xi < i; ++xi) {
-          poly.vertices.add(_int(p[xi]));
+          poly.vertices.add(toInt(p[xi]));
         }
         poly.vertices.add(vi);
 
@@ -464,15 +474,15 @@ class FbxMesh extends FbxGeometry {
             : e.properties;
 
     for (int ei = 0, len = p.length; ei < len; ei += 2) {
-      int v1 = _int(p[ei]);
-      int v2 = _int(p[ei + 1]);
+      int v1 = toInt(p[ei]);
+      int v2 = toInt(p[ei + 1]);
       edges.add(new FbxEdge(v1, v2));
     }*/
   }
 
 
   void _loadNormals(FbxElement e) {
-    int layerIndex = _int(e.properties[0]);
+    int layerIndex = toInt(e.properties[0]);
     FbxLayer layer = getLayer(layerIndex);
 
     FbxLayerElement<Vector3> normals = layer.normals;
@@ -483,9 +493,9 @@ class FbxMesh extends FbxGeometry {
       }
 
       if (c.id == 'MappingInformationType') {
-        normals.mappingMode = _stringToMappingMode(c.properties[0]);
+        normals.mappingMode = stringToMappingMode(c.properties[0]);
       } else if (c.id == 'ReferenceInformationType') {
-        normals.referenceMode = _stringToReferenceMode(c.properties[0]);
+        normals.referenceMode = stringToReferenceMode(c.properties[0]);
       } else if (c.id == 'Normals') {
         var p = (c.properties.length == 1 && c.properties[0] is List) ? c.properties[0]
                 : (c.children.length == 1) ? c.children[0].properties
@@ -493,16 +503,16 @@ class FbxMesh extends FbxGeometry {
 
         normals.data = new List<Vector3>(p.length ~/ 3);
         for (int i = 0, j = 0, len = p.length; i < len; i += 3) {
-          normals.data[j++] = new Vector3(_double(p[i]),
-              _double(p[i + 1]),
-              _double(p[i + 2]));
+          normals.data[j++] = new Vector3(toDouble(p[i]),
+              toDouble(p[i + 1]),
+              toDouble(p[i + 2]));
         }
       }
     }
   }
 
   void _loadUvs(FbxElement e) {
-    int layerIndex = _int(e.properties[0]);
+    int layerIndex = toInt(e.properties[0]);
     FbxLayer layer = getLayer(layerIndex);
 
     FbxLayerElement<Vector2> uvs = layer.uvs;
@@ -513,18 +523,17 @@ class FbxMesh extends FbxGeometry {
               : c.properties;
 
       if (c.id == 'MappingInformationType') {
-        uvs.mappingMode = _stringToMappingMode(p[0]);
+        uvs.mappingMode = stringToMappingMode(p[0]);
       } else if (c.id == 'ReferenceInformationType') {
-        uvs.referenceMode = _stringToReferenceMode(p[0]);
+        uvs.referenceMode = stringToReferenceMode(p[0]);
       } else if (c.id == 'UV' && p.isNotEmpty) {
         uvs.data = new List<Vector2>(p.length ~/ 2);
         for (int i = 0, j = 0, len = p.length; i < len; i += 2) {
-          uvs.data[j++] = new Vector2(_double(p[i]), _double(p[i + 1]));
+          uvs.data[j++] = new Vector2(toDouble(p[i]), toDouble(p[i + 1]));
         }
       }
     }
   }
-
 
   void _loadTexture(FbxElement e) {
   }

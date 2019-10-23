@@ -1,7 +1,8 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../fbx_element.dart';
+import 'fbx_object.dart';
+import 'fbx_property.dart';
+import 'fbx_scene.dart';
 
 class FbxAnimStack extends FbxObject {
   FbxProperty description;

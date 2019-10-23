@@ -1,11 +1,7 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import 'fbx_element.dart';
 
-/**
- * Base class for [FbxAsciiParser] and [FbxBinaryParser].
- */
+/// Base class for [FbxAsciiParser] and [FbxBinaryParser].
 abstract class FbxParser {
   FbxElement nextElement();
 

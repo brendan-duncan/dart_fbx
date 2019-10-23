@@ -1,8 +1,6 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
-
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import 'fbx_mapping_mode.dart';
+import 'fbx_reference_mode.dart';
 
 class FbxLayerElement<T> {
   FbxMappingMode mappingMode = FbxMappingMode.None;

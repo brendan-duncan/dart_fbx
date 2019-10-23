@@ -18,16 +18,14 @@ class GlColorShader extends GlShader {
     }
     """;
 
-  GlColorShader(GL.RenderingContext gl)
+  GlColorShader(RenderingContext gl)
     : super(gl, vertexSource, fragmentSource) {
     _uColor = _gl.getUniformLocation(_shaderProgram, 'color');
   }
-
 
   void setColor(double r, double g, double b, double a) {
     _gl.uniform4f(_uColor, r, g, b, a);
   }
 
-
-  GL.UniformLocation _uColor;
+  UniformLocation _uColor;
 }

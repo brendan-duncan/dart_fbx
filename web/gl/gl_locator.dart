@@ -1,7 +1,7 @@
 part of fbx_viewer;
 
 class GlLocator {
-  GL.RenderingContext _gl;
+  RenderingContext _gl;
   GlObject _glObject;
   GlColorShader _colorShader;
   Matrix4 transform = new Matrix4.identity();
@@ -18,7 +18,6 @@ class GlLocator {
     _glObject.setPoints(points);
   }
 
-
   void draw(Matrix4 mvMatrix, Matrix4 pMatrix) {
     _colorShader.bind();
     _colorShader.setMatrixUniforms(mvMatrix * transform, pMatrix);
@@ -26,13 +25,13 @@ class GlLocator {
     _colorShader.bindGeometry(_glObject);
 
     _colorShader.setColor(1.0, 0.0, 0.0, 1.0);
-    _colorShader.draw(GL.LINES, 0, 2);
+    _colorShader.draw(WebGL.LINES, 0, 2);
 
     _colorShader.setColor(0.0, 1.0, 0.0, 1.0);
-    _colorShader.draw(GL.LINES, 2, 2);
+    _colorShader.draw(WebGL.LINES, 2, 2);
 
     _colorShader.setColor(0.0, 0.0, 1.0, 1.0);
-    _colorShader.draw(GL.LINES, 4, 2);
+    _colorShader.draw(WebGL.LINES, 4, 2);
 
     _colorShader.unbind();
   }

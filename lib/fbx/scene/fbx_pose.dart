@@ -1,7 +1,9 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../fbx_element.dart';
+import 'fbx_node.dart';
+import 'fbx_object.dart';
+import 'fbx_scene.dart';
+import 'package:vector_math/vector_math.dart';
 
 class FbxPose extends FbxObject {
   Map<FbxNode, Matrix4> data = {};
@@ -27,7 +29,7 @@ class FbxPose extends FbxObject {
             if (p != null) {
               matrix = new Matrix4.zero();
               for (int i = 0; i < 16; ++i) {
-                matrix.storage[i] = _double(p[i]);
+                matrix.storage[i] = toDouble(p[i]);
               }
             }
           }
@@ -46,7 +48,6 @@ class FbxPose extends FbxObject {
       }
     }
   }
-
 
   Matrix4 getMatrix(FbxNode node) {
     if (!data.containsKey(node)) {

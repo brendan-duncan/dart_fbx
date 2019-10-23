@@ -1,8 +1,4 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
-
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
 
 class FbxEdge {
   List<int> vertices = [0, 0];

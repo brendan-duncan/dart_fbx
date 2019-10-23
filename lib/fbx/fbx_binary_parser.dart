@@ -1,11 +1,11 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import 'fbx_element.dart';
+import 'fbx_parser.dart';
+import 'input_buffer.dart';
+import 'dart:typed_data';
+import 'package:archive/archive.dart';
 
-/**
- * Decodes a binary FBX file.
- */
+/// Decodes a binary FBX file.
 class FbxBinaryParser extends FbxParser {
   static const FILE_HEADER = 'Kaydara FBX Binary  \x00';
 

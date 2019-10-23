@@ -1,7 +1,10 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../fbx_element.dart';
+import 'fbx_deformer.dart';
+import 'fbx_node.dart';
+import 'fbx_property.dart';
+import 'fbx_scene.dart';
+
 
 class FbxSkinDeformer extends FbxDeformer {
   static const int RIGID = 0;
@@ -19,7 +22,7 @@ class FbxSkinDeformer extends FbxDeformer {
 
     for (FbxElement c in element.children) {
       if (c.id == 'Link_DeformAcuracy') {
-        linkDeformAcuracy.value = _int(c.properties[0]);
+        linkDeformAcuracy.value = toInt(c.properties[0]);
       } else if (c.id == 'SkinningType') {
         if (c.properties[0] == 'Rigid') {
           skinningType.value = RIGID;
@@ -33,7 +36,6 @@ class FbxSkinDeformer extends FbxDeformer {
       }
     }
   }
-
 
   List<FbxNode> get clusters => connectedTo;
 }

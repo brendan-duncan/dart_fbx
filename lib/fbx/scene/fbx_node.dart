@@ -1,7 +1,10 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../fbx_element.dart';
+import '../matrix_utils.dart';
+import 'fbx_object.dart';
+import 'fbx_property.dart';
+import 'fbx_scene.dart';
+import 'package:vector_math/vector_math.dart';
 
 
 class FbxNode extends FbxObject {
@@ -95,7 +98,7 @@ class FbxNode extends FbxObject {
 
     transform.translate(translate.value.x, translate.value.y, translate.value.z);
     transform.rotateZ(radians(rotate.value.z));
-    _rotateY(transform, radians(rotate.value.y));
+    rotateY(transform, radians(rotate.value.y));
     transform.rotateX(radians(rotate.value.x));
     transform.scale(scale.value.x, scale.value.y, scale.value.z);
   }

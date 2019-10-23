@@ -68,7 +68,7 @@ class GlSkinningShader extends GlShader {
     """;
 
 
-  GlSkinningShader(GL.RenderingContext gl)
+  GlSkinningShader(RenderingContext gl)
     : super(gl, vertexSource, fragmentSource) {
     _uJoints = _gl.getUniformLocation(_shaderProgram, 'joints');
     _uHasTexture = _gl.getUniformLocation(_shaderProgram, 'hasTexture');
@@ -96,29 +96,29 @@ class GlSkinningShader extends GlShader {
 
     if (_aVertexUv != -1 && obj.uvBuffer != null) {
       _gl.enableVertexAttribArray(_aVertexUv);
-      _gl.bindBuffer(GL.ARRAY_BUFFER, obj.uvBuffer);
+      _gl.bindBuffer(WebGL.ARRAY_BUFFER, obj.uvBuffer);
       _gl.vertexAttribPointer(_aVertexUv, 2,
-          GL.RenderingContext.FLOAT, false, 0, 0);
+          WebGL.FLOAT, false, 0, 0);
     }
 
     if (_skinIndices != -1) {
       _gl.enableVertexAttribArray(_skinIndices);
-      _gl.bindBuffer(GL.ARRAY_BUFFER, obj.skinIndices);
+      _gl.bindBuffer(WebGL.ARRAY_BUFFER, obj.skinIndices);
       _gl.vertexAttribPointer(_skinIndices, 4,
-          GL.RenderingContext.FLOAT, false, 0, 0);
+          WebGL.FLOAT, false, 0, 0);
     }
 
     if (_skinWeights != -1) {
       _gl.enableVertexAttribArray(_skinWeights);
-      _gl.bindBuffer(GL.ARRAY_BUFFER, obj.skinWeights);
+      _gl.bindBuffer(WebGL.ARRAY_BUFFER, obj.skinWeights);
       _gl.vertexAttribPointer(_skinWeights, 4,
-          GL.RenderingContext.FLOAT, false, 0, 0);
+          WebGL.FLOAT, false, 0, 0);
     }
   }
 
-  GL.UniformLocation _uJoints;
-  GL.UniformLocation _uHasTexture;
-  GL.UniformLocation _uTexture;
+  UniformLocation _uJoints;
+  UniformLocation _uHasTexture;
+  UniformLocation _uTexture;
   int _aVertexUv;
   int _skinIndices;
   int _skinWeights;

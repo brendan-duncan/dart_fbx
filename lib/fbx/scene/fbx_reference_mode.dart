@@ -1,7 +1,4 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
 
 enum FbxReferenceMode {
   /// This indicates that the mapping information for the n'th element is found
@@ -22,7 +19,7 @@ enum FbxReferenceMode {
 }
 
 
-FbxReferenceMode _stringToReferenceMode(String id) {
+FbxReferenceMode stringToReferenceMode(String id) {
   if (id == 'Direct') {
     return FbxReferenceMode.Direct;
   } else if (id == 'Index') {

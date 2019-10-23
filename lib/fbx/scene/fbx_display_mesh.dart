@@ -1,8 +1,7 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
-
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import 'dart:math';
+import 'dart:typed_data';
+import 'package:vector_math/vector_math.dart';
 
 class FbxDisplayMesh {
   int numPoints;

@@ -1,7 +1,7 @@
 part of fbx_viewer;
 
 class GlTexture {
-  GL.Texture texture;
+  Texture texture;
   int width = 0;
   int height = 0;
 
@@ -14,35 +14,34 @@ class GlTexture {
         texture = _gl.createTexture();
       }
 
-      _gl.bindTexture(GL.TEXTURE_2D, texture);
+      _gl.bindTexture(WebGL.TEXTURE_2D, texture);
 
-      _gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR);
-      _gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR);
-      _gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP_TO_EDGE);
-      _gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP_TO_EDGE);
-      _gl.pixelStorei(GL.UNPACK_FLIP_Y_WEBGL, 1);
+      _gl.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MAG_FILTER, WebGL.LINEAR);
+      _gl.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MIN_FILTER, WebGL.LINEAR);
+      _gl.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_WRAP_S, WebGL.CLAMP_TO_EDGE);
+      _gl.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_WRAP_T, WebGL.CLAMP_TO_EDGE);
+      _gl.pixelStorei(WebGL.UNPACK_FLIP_Y_WEBGL, 1);
 
       width = image.width;
       height = image.height;
 
-      _gl.texImage2DImage(GL.TEXTURE_2D,
+      _gl.texImage2D(WebGL.TEXTURE_2D,
           0,
-          GL.RGBA,
-          GL.RGBA,
-          GL.UNSIGNED_BYTE,
+          WebGL.RGBA,
+          WebGL.RGBA,
+          WebGL.UNSIGNED_BYTE,
           image);
 
-      _gl.bindTexture(GL.TEXTURE_2D, null);
+      _gl.bindTexture(WebGL.TEXTURE_2D, null);
     });
 
     image.src = url;
   }
 
-
   void bind([int index=0]) {
-    _gl.activeTexture(GL.TEXTURE0 + index);
-    _gl.bindTexture(GL.TEXTURE_2D, texture);
+    _gl.activeTexture(WebGL.TEXTURE0 + index);
+    _gl.bindTexture(WebGL.TEXTURE_2D, texture);
   }
 
-  GL.RenderingContext _gl;
+  RenderingContext _gl;
 }

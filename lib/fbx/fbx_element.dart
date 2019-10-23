@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2015 Brendan Duncan. All rights reserved.
  */
-part of fbx;
 
 class FbxElement {
   String id;
@@ -18,12 +17,11 @@ class FbxElement {
 
   String getString(int index) => properties[index].toString();
 
-  int getInt(int index) => _int(properties[index]);
+  int getInt(int index) => toInt(properties[index]);
 
-  double getDouble(int index) => _double(properties[index]);
+  double getDouble(int index) => toDouble(properties[index]);
 
+  double toDouble(x) => x is String ? double.parse(x) : x.toDouble();
 
-  double _double(x) => x is String ? double.parse(x) : x.toDouble();
-
-  int _int(x) => x is String ? int.parse(x) : x.toInt();
+  int toInt(x) => x is String ? int.parse(x) : x.toInt();
 }

@@ -1,7 +1,4 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
 
 class FbxFrameRate {
   static const int DEFAULT = 0;

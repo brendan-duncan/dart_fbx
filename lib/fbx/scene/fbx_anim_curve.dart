@@ -1,7 +1,8 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../fbx_element.dart';
+import 'fbx_object.dart';
+import 'fbx_anim_key.dart';
+import 'fbx_scene.dart';
 
 class FbxAnimCurve extends FbxObject {
   double defaultValue;
@@ -39,8 +40,8 @@ class FbxAnimCurve extends FbxObject {
     if (keyTime != null && keyValue != null) {
       if (keyTime.length == keyValue.length) {
         for (int i = 0; i < keyTime.length; ++i) {
-          keys.add(new FbxAnimKey(_int(keyTime[i]),
-                                  _double(keyValue[i]),
+          keys.add(new FbxAnimKey(toInt(keyTime[i]),
+                                  toDouble(keyValue[i]),
                                   FbxAnimKey.INTERPOLATION_LINEAR));
         }
       }

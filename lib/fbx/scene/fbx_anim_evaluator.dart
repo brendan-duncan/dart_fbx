@@ -1,12 +1,15 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../matrix_utils.dart';
+import 'fbx_anim_curve.dart';
+import 'fbx_anim_curve_node.dart';
+import 'fbx_node.dart';
+import 'fbx_object.dart';
+import 'fbx_scene.dart';
+import 'package:vector_math/vector_math.dart';
 
 class FbxAnimEvaluator extends FbxObject {
   FbxAnimEvaluator(FbxScene scene)
     : super(0, '', 'AnimEvaluator', null, scene);
-
 
   Matrix4 getNodeGlobalTransform(FbxNode node, double time) {
     Matrix4 t = getNodeLocalTransform(node, time);
@@ -18,7 +21,6 @@ class FbxAnimEvaluator extends FbxObject {
 
     return t;
   }
-
 
   Matrix4 getNodeLocalTransform(FbxNode node, double time) {
     // Cache the evaluated transform
@@ -96,7 +98,7 @@ class FbxAnimEvaluator extends FbxObject {
     node.transform.setIdentity();
     node.transform.translate(tx, ty, tz);
     node.transform.rotateZ(radians(rz));
-    _rotateY(node.transform, radians(ry));
+    rotateY(node.transform, radians(ry));
     node.transform.rotateX(radians(rx));
     node.transform.scale(sx, sy, sz);
 

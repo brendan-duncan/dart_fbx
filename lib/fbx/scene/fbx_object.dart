@@ -1,7 +1,9 @@
-/*
- * Copyright (C) 2015 Brendan Duncan. All rights reserved.
- */
-part of fbx;
+/// Copyright (C) 2015 Brendan Duncan. All rights reserved.
+import '../fbx_element.dart';
+import 'fbx_scene.dart';
+import 'fbx_property.dart';
+import 'fbx_node.dart';
+import 'fbx_node_attribute.dart';
 
 class FbxObject {
   int id;
@@ -16,7 +18,6 @@ class FbxObject {
   String reference;
 
   FbxObject(this.id, this.name, this.type, this.element, this.scene);
-
 
   FbxNode getParentNode() {
     if (this is FbxNode) {
@@ -108,10 +109,9 @@ class FbxObject {
   getProperty(String name) =>
       properties.containsKey(name) ? properties[name].value : null;
 
-
   String toString() => '$name ($type)';
 
-  double _double(x) => x is String ? double.parse(x) : x.toDouble();
+  double toDouble(x) => x is String ? double.parse(x) : x.toDouble();
 
-  int _int(x) => x is String ? int.parse(x) : x.toInt();
+  int toInt(x) => x is String ? int.parse(x) : x.toInt();
 }
