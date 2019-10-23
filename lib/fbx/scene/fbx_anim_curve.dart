@@ -40,9 +40,9 @@ class FbxAnimCurve extends FbxObject {
     if (keyTime != null && keyValue != null) {
       if (keyTime.length == keyValue.length) {
         for (int i = 0; i < keyTime.length; ++i) {
-          keys.add(new FbxAnimKey(toInt(keyTime[i]),
-                                  toDouble(keyValue[i]),
-                                  FbxAnimKey.INTERPOLATION_LINEAR));
+          keys.add(FbxAnimKey(toInt(keyTime[i]),
+                              toDouble(keyValue[i]),
+                              FbxAnimKey.INTERPOLATION_LINEAR));
         }
       }
     }

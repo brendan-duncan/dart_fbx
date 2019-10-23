@@ -3,7 +3,7 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:math';
 
 Matrix4 inverseMat(Matrix4 m) {
-  Matrix4 i = new Matrix4.copy(m);
+  Matrix4 i = Matrix4.copy(m);
   i.invert();
   return i;
 }

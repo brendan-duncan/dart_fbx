@@ -31,7 +31,7 @@ class FbxAnimLayer extends FbxObject {
     mute = addProperty('Mute', false);
     solo = addProperty('Solo', false);
     lock = addProperty('Lock', false);
-    color = addProperty('Color', new Vector3(0.8, 0.8, 0.8));
+    color = addProperty('Color', Vector3(0.8, 0.8, 0.8));
     blendMode = addProperty('BlendMode', BLEND_ADDITIVE);
     rotationAccumulationMode = addProperty('RotationAccumulationMode', ROTATION_BY_LAYER);
     scaleAccumulationMode = addProperty('ScaleAccumulationMode', SCALE_MULTIPLY);
@@ -46,8 +46,7 @@ class FbxAnimLayer extends FbxObject {
       } else if (c.id == 'Lock') {
         lock.value = c.getInt(0) != 0;
       } else if (c.id == 'Color') {
-        color.value = new Vector3(c.getDouble(0), c.getDouble(1),
-                                  c.getDouble(2));
+        color.value = Vector3(c.getDouble(0), c.getDouble(1), c.getDouble(2));
       } else if (c.id == 'BlendMode') {
         blendMode.value = c.getInt(0);
       } else if (c.id == 'RotationAccumulationMode') {

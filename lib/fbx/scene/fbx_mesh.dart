@@ -53,7 +53,7 @@ class FbxMesh extends FbxGeometry {
     }
 
     if (layers[index] == null) {
-      layers[index] = new FbxLayer();
+      layers[index] = FbxLayer();
     }
 
     return layers[index];
@@ -83,7 +83,7 @@ class FbxMesh extends FbxGeometry {
 
   List<Vector3> get deformedPoints {
     if (_deformedPoints == null) {
-      _deformedPoints = new List<Vector3>(points.length);
+      _deformedPoints = List<Vector3>(points.length);
     }
     return _deformedPoints;
   }
@@ -125,7 +125,7 @@ class FbxMesh extends FbxGeometry {
 
 
     if (data == null) {
-      data = new Float32List(_clusters.length * 16);
+      data = Float32List(_clusters.length * 16);
     }
 
     FbxPose pose = scene.getPose(0);
@@ -151,7 +151,7 @@ class FbxMesh extends FbxGeometry {
         continue;
       }
 
-      Vector3 sp = new Vector3.zero();
+      Vector3 sp = Vector3.zero();
       Vector3 p = points[pi];
       double weightSum = 0.0;
 
@@ -208,7 +208,7 @@ class FbxMesh extends FbxGeometry {
 
 
   void generateClusterMap() {
-    clusterMap = new List(points.length);
+    clusterMap = List(points.length);
 
     for (FbxCluster cluster in _clusters) {
       if (cluster.indexes == null || cluster.weights == null) {
@@ -236,7 +236,7 @@ class FbxMesh extends FbxGeometry {
     _clusters = _getClusters();
     generateClusterMap();
 
-    FbxDisplayMesh disp = new FbxDisplayMesh();
+    FbxDisplayMesh disp = FbxDisplayMesh();
     display.add(disp);
 
     bool splitPolygonVerts = false;
@@ -263,7 +263,7 @@ class FbxMesh extends FbxGeometry {
       }
     }
 
-    disp.pointMap = new List<List<int>>(points.length);
+    disp.pointMap = List<List<int>>(points.length);
 
     if (splitPolygonVerts) {
       int triCount = 0;
@@ -274,15 +274,15 @@ class FbxMesh extends FbxGeometry {
       }
 
       disp.numPoints = numPoints;
-      disp.points = new Float32List(numPoints * 3);
-      disp.vertices = new Uint16List(triCount * 3);
+      disp.points = Float32List(numPoints * 3);
+      disp.vertices = Uint16List(triCount * 3);
 
       if (normals != null) {
-        disp.normals = new Float32List(disp.points.length);
+        disp.normals = Float32List(disp.points.length);
       }
 
       if (uvs != null) {
-        disp.uvs = new Float32List(disp.points.length);
+        disp.uvs = Float32List(disp.points.length);
       }
 
       int pi = 0;
@@ -297,7 +297,7 @@ class FbxMesh extends FbxGeometry {
           int p1 = poly.vertices[vi];
 
           if (disp.pointMap[p1] == null) {
-            disp.pointMap[p1] = new List<int>();
+            disp.pointMap[p1] = List<int>();
           }
           disp.pointMap[p1].add(pi);
 
@@ -336,7 +336,7 @@ class FbxMesh extends FbxGeometry {
       }
     } else {
       disp.numPoints = points.length;
-      disp.points = new Float32List(points.length * 3);
+      disp.points = Float32List(points.length * 3);
 
       for (int xi = 0, pi = 0, len = points.length; xi < len; ++xi) {
         disp.pointMap[xi] = [pi];
@@ -347,7 +347,7 @@ class FbxMesh extends FbxGeometry {
       }
 
       if (normals != null) {
-        disp.normals = new Float32List(disp.points.length);
+        disp.normals = Float32List(disp.points.length);
 
         for (int vi = 0, ni = 0, len = normals.data.length; ni < len; ++ni) {
           disp.normals[vi++] = normals[ni].x;
@@ -357,7 +357,7 @@ class FbxMesh extends FbxGeometry {
       }
 
       if (uvs != null) {
-        disp.uvs = new Float32List(points.length * 2);
+        disp.uvs = Float32List(points.length * 2);
 
         for (int vi = 0, ni = 0, len = uvs.data.length; ni < len; ++ni) {
           disp.uvs[vi++] = uvs[ni].x;
@@ -376,7 +376,7 @@ class FbxMesh extends FbxGeometry {
         }
       }
 
-      disp.vertices = new Uint16List.fromList(verts);
+      disp.vertices = Uint16List.fromList(verts);
     }
 
     if (disp.normals == null) {
@@ -384,10 +384,10 @@ class FbxMesh extends FbxGeometry {
     }
 
     if (_clusters.isNotEmpty) {
-      disp.skinWeights = new Float32List(disp.numPoints * 4);
-      disp.skinIndices = new Float32List(disp.numPoints * 4);
+      disp.skinWeights = Float32List(disp.numPoints * 4);
+      disp.skinIndices = Float32List(disp.numPoints * 4);
 
-      Int32List count = new Int32List(points.length);
+      Int32List count = Int32List(points.length);
 
       for (int ci = 0, len = _clusters.length; ci < len; ++ci) {
         double index = ci.toDouble();
@@ -428,10 +428,10 @@ class FbxMesh extends FbxGeometry {
             : (e.children.length == 1) ? e.children[0].properties
             : e.properties;
 
-    points = new List(p.length ~/ 3);
+    points = List(p.length ~/ 3);
 
     for (int i = 0, j = 0, len = p.length; i < len; i += 3) {
-      points[j++] = new Vector3(toDouble(p[i]), toDouble(p[i + 1]),
+      points[j++] = Vector3(toDouble(p[i]), toDouble(p[i + 1]),
                                 toDouble(p[i + 2]));
     }
   }
@@ -454,7 +454,7 @@ class FbxMesh extends FbxGeometry {
       if (vi < 0) {
         vi = ~vi;
 
-        FbxPolygon poly = new FbxPolygon();
+        FbxPolygon poly = FbxPolygon();
         polygons.add(poly);
 
         for (int xi = polygonStart; xi < i; ++xi) {
@@ -476,7 +476,7 @@ class FbxMesh extends FbxGeometry {
     for (int ei = 0, len = p.length; ei < len; ei += 2) {
       int v1 = toInt(p[ei]);
       int v2 = toInt(p[ei + 1]);
-      edges.add(new FbxEdge(v1, v2));
+      edges.add(FbxEdge(v1, v2));
     }*/
   }
 
@@ -501,9 +501,9 @@ class FbxMesh extends FbxGeometry {
                 : (c.children.length == 1) ? c.children[0].properties
                 : c.properties;
 
-        normals.data = new List<Vector3>(p.length ~/ 3);
+        normals.data = List<Vector3>(p.length ~/ 3);
         for (int i = 0, j = 0, len = p.length; i < len; i += 3) {
-          normals.data[j++] = new Vector3(toDouble(p[i]),
+          normals.data[j++] = Vector3(toDouble(p[i]),
               toDouble(p[i + 1]),
               toDouble(p[i + 2]));
         }
@@ -527,9 +527,9 @@ class FbxMesh extends FbxGeometry {
       } else if (c.id == 'ReferenceInformationType') {
         uvs.referenceMode = stringToReferenceMode(p[0]);
       } else if (c.id == 'UV' && p.isNotEmpty) {
-        uvs.data = new List<Vector2>(p.length ~/ 2);
+        uvs.data = List<Vector2>(p.length ~/ 2);
         for (int i = 0, j = 0, len = p.length; i < len; i += 2) {
-          uvs.data[j++] = new Vector2(toDouble(p[i]), toDouble(p[i + 1]));
+          uvs.data[j++] = Vector2(toDouble(p[i]), toDouble(p[i + 1]));
         }
       }
     }

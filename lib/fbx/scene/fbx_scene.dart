@@ -45,7 +45,7 @@ class FbxScene extends FbxObject {
 
   FbxScene()
     : super(0, '', 'Scene', null, null) {
-    evaluator = new FbxAnimEvaluator(this);
+    evaluator = FbxAnimEvaluator(this);
   }
 
   FbxPose getPose(int index) => index < poses.length ? poses[index] : null;

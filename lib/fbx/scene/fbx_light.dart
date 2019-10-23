@@ -23,7 +23,7 @@ class FbxLight extends FbxNodeAttribute {
 
   FbxLight(int id, String name, FbxElement element, FbxScene scene)
     : super(id, name, 'Light', element, scene) {
-    color = addProperty('Color', new Vector3(1.0, 1.0, 1.0));
+    color = addProperty('Color', Vector3(1.0, 1.0, 1.0));
     intensity = addProperty('Intensity', 1.0);
     coneAngle = addProperty('Cone angle', 1.0);
     decay = addProperty('Decay', NO_DECAY);
@@ -34,8 +34,8 @@ class FbxLight extends FbxNodeAttribute {
         for (FbxElement p in c.children) {
           if (p.id == 'Property') {
             if (p.properties[0] == 'Color') {
-              color.value = new Vector3(p.getDouble(3), p.getDouble(4),
-                                        p.getDouble(5));
+              color.value = Vector3(p.getDouble(3), p.getDouble(4),
+                                    p.getDouble(5));
             } else if (p.properties[0] == 'Intensity') {
               intensity.value = p.getDouble(3);
             } else if (p.properties[0] == 'Cone angle') {

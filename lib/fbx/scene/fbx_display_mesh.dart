@@ -21,17 +21,17 @@ class FbxDisplayMesh {
     }
 
     // Compute normals
-    normals = new Float32List(points.length);
+    normals = Float32List(points.length);
     for (int ti = 0; ti < vertices.length; ti += 3) {
-      Vector3 p1 = new Vector3(points[vertices[ti] * 3],
+      Vector3 p1 = Vector3(points[vertices[ti] * 3],
           points[vertices[ti] * 3 + 1],
           points[vertices[ti] * 3 + 2]);
 
-      Vector3 p2 = new Vector3(points[vertices[ti + 1] * 3],
+      Vector3 p2 = Vector3(points[vertices[ti + 1] * 3],
           points[vertices[ti + 1] * 3 + 1],
           points[vertices[ti + 1] * 3 + 2]);
 
-      Vector3 p3 = new Vector3(points[vertices[ti + 2] * 3],
+      Vector3 p3 = Vector3(points[vertices[ti + 2] * 3],
           points[vertices[ti + 2] * 3 + 1],
           points[vertices[ti + 2] * 3 + 2]);
 

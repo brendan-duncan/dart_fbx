@@ -52,7 +52,7 @@ class GlShader {
   }
 
   void setMatrixUniforms(Matrix4 mvMatrix, Matrix4 pMatrix) {
-    _mvMatrix = new Matrix4.copy(mvMatrix);
+    _mvMatrix = Matrix4.copy(mvMatrix);
     _gl.uniformMatrix4fv(_uPMatrix, false, pMatrix.storage);
   }
 

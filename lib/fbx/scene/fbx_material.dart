@@ -26,17 +26,17 @@ class FbxMaterial extends FbxObject {
     : super(id, name, 'Material', element, scene) {
 
     shadingModel = addProperty('ShadingModel', 'lambert');
-    ambientColor = addProperty('AmbientColor', new Vector3(0.0, 0.0, 0.0));
-    diffuseColor = addProperty('DiffuseColor', new Vector3(1.0, 1.0, 1.0));
+    ambientColor = addProperty('AmbientColor', Vector3(0.0, 0.0, 0.0));
+    diffuseColor = addProperty('DiffuseColor', Vector3(1.0, 1.0, 1.0));
     transparencyFactor = addProperty('TransparencyFactor', 1.0);
-    emissive = addProperty('Emissive', new Vector3(0.0, 0.0, 0.0));
-    ambient = addProperty('Ambient', new Vector3(0.0, 0.0, 0.0));
-    diffuse = addProperty('Diffuse', new Vector3(1.0, 1.0, 1.0));
+    emissive = addProperty('Emissive', Vector3(0.0, 0.0, 0.0));
+    ambient = addProperty('Ambient', Vector3(0.0, 0.0, 0.0));
+    diffuse = addProperty('Diffuse', Vector3(1.0, 1.0, 1.0));
     opacity = addProperty('Opacity', 1.0);
-    specular = addProperty('Specular', new Vector3(1.0, 1.0, 1.0));
+    specular = addProperty('Specular', Vector3(1.0, 1.0, 1.0));
     specularFactor = addProperty('SpecularFactor', 0.0);
     shininess = addProperty('Shininess', 1.0);
-    reflection = addProperty('Reflection', new Vector3(1.0, 1.0, 1.0));
+    reflection = addProperty('Reflection', Vector3(1.0, 1.0, 1.0));
     reflectionFactor = addProperty('ReflectionFactor', 0.0);
 
     for (FbxElement c in element.children) {
@@ -45,33 +45,33 @@ class FbxMaterial extends FbxObject {
       } else if (c.id == 'Properties70') {
         for (FbxElement p in c.children) {
           if (p.properties[0] == 'AmbientColor') {
-            ambientColor.value = new Vector3(p.getDouble(4), p.getDouble(5),
+            ambientColor.value = Vector3(p.getDouble(4), p.getDouble(5),
                                              p.getDouble(6));
           } else if (p.properties[0] == 'DiffuseColor') {
-            diffuseColor.value = new Vector3(p.getDouble(4), p.getDouble(5),
+            diffuseColor.value = Vector3(p.getDouble(4), p.getDouble(5),
                                              p.getDouble(6));
           } else if (p.properties[0] == 'TransparencyFactor') {
             transparencyFactor.value = p.getDouble(4);
           } else if (p.properties[0] == 'Emissive') {
-            emissive.value = new Vector3(p.getDouble(4), p.getDouble(5),
+            emissive.value = Vector3(p.getDouble(4), p.getDouble(5),
                                          p.getDouble(6));
           } else if (p.properties[0] == 'Ambient') {
-            ambient.value = new Vector3(p.getDouble(4), p.getDouble(5),
+            ambient.value = Vector3(p.getDouble(4), p.getDouble(5),
                                         p.getDouble(6));
           } else if (p.properties[0] == 'Diffuse') {
-            diffuse.value = new Vector3(p.getDouble(4), p.getDouble(5),
+            diffuse.value = Vector3(p.getDouble(4), p.getDouble(5),
                                         p.getDouble(6));
           } else if (p.properties[0] == 'Opacity') {
             opacity.value = p.getDouble(4);
           } else if (p.properties[0] == 'Specular') {
-            specular.value = new Vector3(p.getDouble(4), p.getDouble(5),
+            specular.value = Vector3(p.getDouble(4), p.getDouble(5),
                                         p.getDouble(6));
           } else if (p.properties[0] == 'SpecularFactor') {
             specularFactor.value = p.getDouble(4);
           } else if (p.properties[0] == 'Shininess') {
             shininess.value = p.getDouble(4);
           } else if (p.properties[0] == 'Reflection') {
-            reflection.value = new Vector3(p.getDouble(4), p.getDouble(5),
+            reflection.value = Vector3(p.getDouble(4), p.getDouble(5),
                                         p.getDouble(6));
           } else if (p.properties[0] == 'ReflectionFactor') {
             reflectionFactor.value = p.getDouble(4);

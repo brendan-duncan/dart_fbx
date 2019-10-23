@@ -26,22 +26,22 @@ class FbxCluster extends FbxDeformer {
               : c.properties;
 
       if (c.id == 'Indexes') {
-        indexes = new Uint32List(p.length);
+        indexes = Uint32List(p.length);
         for (int i = 0, len = p.length; i < len; ++i) {
           indexes[i] = toInt(p[i]);
         }
       } else if (c.id == 'Weights') {
-        weights = new Float32List(p.length);
+        weights = Float32List(p.length);
         for (int i = 0, len = p.length; i < len; ++i) {
           weights[i] = toDouble(p[i]);
         }
       } else if (c.id == 'Transform') {
-        transform = new Matrix4.identity();
+        transform = Matrix4.identity();
         for (int i = 0, len = p.length; i < len; ++i) {
           transform.storage[i] = toDouble(p[i]);
         }
       } else if (c.id == 'TransformLink') {
-        transformLink = new Matrix4.identity();
+        transformLink = Matrix4.identity();
         for (int i = 0, len = p.length; i < len; ++i) {
           transformLink.storage[i] = toDouble(p[i]);
         }

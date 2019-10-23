@@ -75,7 +75,7 @@ class InputBuffer {
     int pos = position != null ? start + position : this.offset;
     pos += offset;
 
-    return new InputBuffer(buffer, bigEndian: bigEndian, offset: pos,
+    return InputBuffer(buffer, bigEndian: bigEndian, offset: pos,
                            length: count);
   }
 
@@ -128,16 +128,16 @@ class InputBuffer {
       while (!isEOS) {
         int c = readByte();
         if (c == 0) {
-          return new String.fromCharCodes(codes);
+          return String.fromCharCodes(codes);
         }
         codes.add(c);
       }
-      throw new Exception('EOF reached without finding string terminator');
+      throw Exception('EOF reached without finding string terminator');
     }
 
     InputBuffer s = readBytes(len);
     Uint8List bytes = s.toUint8List();
-    String str = new String.fromCharCodes(bytes);
+    String str = String.fromCharCodes(bytes);
     return str;
   }
 
@@ -229,20 +229,20 @@ class InputBuffer {
     int len = length != null ? length : this.length - offset;
     if (buffer is Uint8List) {
       Uint8List b = buffer;
-      return new Uint8List.view(b.buffer,
+      return Uint8List.view(b.buffer,
                                 b.offsetInBytes + this.offset + offset,
                                 len);
     }
-    return new Uint8List.fromList(buffer.sublist(this.offset + offset,
+    return Uint8List.fromList(buffer.sublist(this.offset + offset,
                                                  this.offset + offset + len));
   }
 
   Uint32List toUint32List([int offset = 0]) {
     if (buffer is Uint8List) {
       Uint8List b = buffer;
-      return new Uint32List.view(b.buffer,
+      return Uint32List.view(b.buffer,
                                  b.offsetInBytes + this.offset + offset);
     }
-    return new Uint32List.view(toUint8List().buffer);
+    return Uint32List.view(toUint8List().buffer);
   }
 }

@@ -9,9 +9,9 @@ class FbxElement {
 
   FbxElement(this.id, [int propertyCount]) {
     if (propertyCount != null) {
-      properties = new List(propertyCount);
+      properties = List(propertyCount);
     } else {
-      properties = new List();
+      properties = List();
     }
   }
 

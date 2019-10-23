@@ -39,7 +39,7 @@ class FbxGlobalSettings extends FbxObject {
     originalUpAxisSign = addProperty('OriginalUpAxisSign', 1);
     unitScaleFactor = addProperty('UnitScaleFactor', 1.0);
     originalUnitScaleFactor = addProperty('OriginalUnitScaleFactor', 1.0);
-    ambientColor = addProperty('AmbientColor', new Vector3(0.0, 0.0, 0.0));
+    ambientColor = addProperty('AmbientColor', Vector3(0.0, 0.0, 0.0));
     defaultCamera = addProperty('DefaultCamera', '');
     timeMode = addProperty('TimeMode', FbxFrameRate.DEFAULT);
     timeProtocol = addProperty('TimeProtocol', 0);
@@ -73,8 +73,8 @@ class FbxGlobalSettings extends FbxObject {
           } else if (p.properties[0] == 'OriginalUnitScaleFactor') {
             originalUnitScaleFactor.value = p.getDouble(vi);
           } else if (p.properties[0] == 'AmbientColor') {
-            ambientColor.value = new Vector3(p.getDouble(vi), p.getDouble(vi),
-                                             p.getDouble(vi));
+            ambientColor.value = Vector3(p.getDouble(vi), p.getDouble(vi),
+                                         p.getDouble(vi));
           } else if (p.properties[0] == 'DefaultCamera') {
             defaultCamera.value = p.getString(vi);
           } else if (p.properties[0] == 'TimeMode') {

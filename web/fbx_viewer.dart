@@ -36,9 +36,9 @@ class FbxViewer {
     _viewportHeight = canvas.height;
     _gl = canvas.getContext('experimental-webgl');
 
-    _normalShader = new GlNormalShader(_gl);
-    _colorShader = new GlColorShader(_gl);
-    _skinningShader = new GlSkinningShader(_gl);
+    _normalShader = GlNormalShader(_gl);
+    _colorShader = GlColorShader(_gl);
+    _skinningShader = GlSkinningShader(_gl);
 
     _gl.clearColor(0.3, 0.5, 0.7, 1.0);
     _gl.enable(WebGL.DEPTH_TEST);
@@ -51,12 +51,12 @@ class FbxViewer {
 
 
     String filename = 'data/knight_2014.fbx';
-    _mvMatrix = makeViewMatrix(new Vector3(10.0, 0.0, 25.0),
-                               new Vector3(0.0, 0.0, 0.0),
-                               new Vector3(0.0, 1.0, 0.0));
+    _mvMatrix = makeViewMatrix(Vector3(10.0, 0.0, 25.0),
+                               Vector3(0.0, 0.0, 0.0),
+                               Vector3(0.0, 1.0, 0.0));
 
 
-    var req = new HttpRequest();
+    var req = HttpRequest();
     req.open('GET', filename);
     req.responseType = 'arraybuffer';
 
@@ -73,10 +73,10 @@ class FbxViewer {
         }
 
         // Convert the text to binary byte list.
-        List<int> bytes = new Uint8List.view(req.response);
+        List<int> bytes = Uint8List.view(req.response);
         print('LOADED FBX');
 
-        _scene = new FbxLoader().load(bytes);
+        _scene = FbxLoader().load(bytes);
         //_printScene(_scene);
 
 
@@ -91,7 +91,7 @@ class FbxViewer {
             continue;
           }
 
-          GlObject object = new GlObject(_gl, meshNode, mesh);
+          GlObject object = GlObject(_gl, meshNode, mesh);
           _objects.add(object);
 
           object.setPoints(mesh.display[0].points, WebGL.DYNAMIC_DRAW);
@@ -109,7 +109,7 @@ class FbxViewer {
           if (material != null) {
             if (material.diffuseColor.connectedFrom is FbxTexture) {
               FbxTexture txt = material.diffuseColor.connectedFrom;
-              _texture = new GlTexture(_gl, 'data/' + txt.filename);
+              _texture = GlTexture(_gl, 'data/' + txt.filename);
             }
           }
         }
@@ -184,6 +184,6 @@ class FbxViewer {
 }
 
 void main() {
-  FbxViewer viewer = new FbxViewer(document.querySelector('#fbxviewer'));
+  FbxViewer viewer = FbxViewer(document.querySelector('#fbxviewer'));
   viewer.render();
 }

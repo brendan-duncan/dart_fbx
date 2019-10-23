@@ -90,7 +90,7 @@ class FbxObject {
 
   FbxProperty addProperty(String name, [defaultValue]) {
     if (!properties.containsKey(name)) {
-      properties[name] = new FbxProperty(defaultValue);
+      properties[name] = FbxProperty(defaultValue);
     }
     return properties[name];
   }
@@ -98,7 +98,7 @@ class FbxObject {
 
   FbxProperty setProperty(String name, value) {
     if (!properties.containsKey(name)) {
-      properties[name] = new FbxProperty(value);
+      properties[name] = FbxProperty(value);
     } else {
       properties[name].value = value;
     }

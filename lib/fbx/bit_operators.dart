@@ -76,23 +76,23 @@ double uint64ToFloat64(int d) {
   return __uint64ToFloat64[0];
 }
 
-final __uint8 = new Uint8List(1);
-final __uint8ToInt8 = new Int8List.view(__uint8.buffer);
+final __uint8 = Uint8List(1);
+final __uint8ToInt8 = Int8List.view(__uint8.buffer);
 
-final __uint16 = new Uint16List(1);
-final __uint16ToInt16 = new Int16List.view(__uint16.buffer);
+final __uint16 = Uint16List(1);
+final __uint16ToInt16 = Int16List.view(__uint16.buffer);
 
-final __uint32 = new Uint32List(1);
-final __uint32ToInt32 = new Int32List.view(__uint32.buffer);
-final __uint32ToFloat32 = new Float32List.view(__uint32.buffer);
+final __uint32 = Uint32List(1);
+final __uint32ToInt32 = Int32List.view(__uint32.buffer);
+final __uint32ToFloat32 = Float32List.view(__uint32.buffer);
 
-final __int32 = new Int32List(1);
-final __int32ToUint32 = new Uint32List.view(__int32.buffer);
+final __int32 = Int32List(1);
+final __int32ToUint32 = Uint32List.view(__int32.buffer);
 
-final __uint64 = new Uint64List(1);
-final __uint64ToInt64 = new Int64List.view(__uint64.buffer);
+final __uint64 = Uint64List(1);
+final __uint64ToInt64 = Int64List.view(__uint64.buffer);
 
-final __float32 = new Float32List(1);
-final __float32ToUint32 = new Uint32List.view(__float32.buffer);
+final __float32 = Float32List(1);
+final __float32ToUint32 = Uint32List.view(__float32.buffer);
 
-final __uint64ToFloat64 = new Float64List.view(__uint64.buffer);
+final __uint64ToFloat64 = Float64List.view(__uint64.buffer);

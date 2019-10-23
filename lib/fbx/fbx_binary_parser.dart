@@ -73,7 +73,7 @@ class FbxBinaryParser extends FbxParser {
 
     var elemId = _input.readString(_input.readByte());
 
-    FbxElement elem = new FbxElement(elemId, propCount);
+    FbxElement elem = FbxElement(elemId, propCount);
 
     for (int i = 0; i < propCount; ++i) {
       int s = _input.readByte();
@@ -92,7 +92,7 @@ class FbxBinaryParser extends FbxParser {
     }
 
     if (_input.position != endOffset) {
-      throw new Exception("scope length not reached, something is wrong");
+      throw Exception("scope length not reached, something is wrong");
     }
 
     return elem;
@@ -153,13 +153,13 @@ class FbxBinaryParser extends FbxParser {
 
     Uint8List data;
     if (encoding == ZLIB_COMPRESSED) {
-      data = new ZLibDecoder().decodeBytes(bytes.toUint8List());
+      data = ZLibDecoder().decodeBytes(bytes.toUint8List());
     } else {
       data = bytes.toUint8List();
     }
 
     if (length * arrayStride != data.length) {
-      throw new Exception('Invalid Array Data');
+      throw Exception('Invalid Array Data');
     }
 
     switch (s) {

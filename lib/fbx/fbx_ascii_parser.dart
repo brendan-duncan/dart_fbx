@@ -49,7 +49,7 @@ class FbxAsciiParser extends FbxParser {
       return null;
     }
 
-    FbxElement elem = new FbxElement(tk);
+    FbxElement elem = FbxElement(tk);
 
     int sp = _input.offset;
     tk = _nextToken(_input);
@@ -114,7 +114,7 @@ class FbxAsciiParser extends FbxParser {
     }
 
     if (c == TK_COMMA || c == TK_LBRACE || c == TK_RBRACE || c == TK_COLON) {
-      String s = new String.fromCharCode(c);
+      String s = String.fromCharCode(c);
       if (peek) {
         input.offset = sp;
       }

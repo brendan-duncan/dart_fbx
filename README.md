@@ -1,6 +1,6 @@
 # FBX #
 
-**THIS LIBRARY IS WORK-IN-PROGRESS. MANY FBX FILES, PARTICULARLY OLDER FBX FILES, WILL LIKELY NOT LOAD CORRECTLY YET AS I"M STILL WORKING ON THE DECODER.**
+**This library is experimental. Some FBX files, particularly older fbx files, may not load correctly. No guarantee is provided as FBX is a closed proprietary format.**
 
 ## Introduction ##
 

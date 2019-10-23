@@ -6,7 +6,7 @@ class GlTexture {
   int height = 0;
 
   GlTexture(this._gl, String url) {
-    var image = new ImageElement();
+    var image = ImageElement();
     image.crossOrigin = 'anonymous';
 
     image.onLoad.listen((e) {

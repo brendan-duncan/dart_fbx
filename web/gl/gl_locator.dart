@@ -4,17 +4,17 @@ class GlLocator {
   RenderingContext _gl;
   GlObject _glObject;
   GlColorShader _colorShader;
-  Matrix4 transform = new Matrix4.identity();
+  Matrix4 transform = Matrix4.identity();
 
   GlLocator(this._gl, this._colorShader) {
-    Float32List points = new Float32List.fromList([0.0, 0.0, 0.0,
+    Float32List points = Float32List.fromList([0.0, 0.0, 0.0,
                                                    1.0, 0.0, 0.0,
                                                    0.0, 0.0, 0.0,
                                                    0.0, 1.0, 0.0,
                                                    0.0, 0.0, 0.0,
                                                    0.0, 0.0, 1.0]);
 
-    _glObject = new GlObject(_gl, null, null);
+    _glObject = GlObject(_gl, null, null);
     _glObject.setPoints(points);
   }
 

@@ -7,7 +7,7 @@ class FbxLayer {
 
   FbxLayerElement<Vector3> get normals {
     if (_normals == null) {
-      _normals = new FbxLayerElement<Vector3>();
+      _normals = FbxLayerElement<Vector3>();
     }
     return _normals;
   }
@@ -17,7 +17,7 @@ class FbxLayer {
 
   FbxLayerElement<Vector3> get binormals {
     if (_binormals == null) {
-      _binormals = new FbxLayerElement<Vector3>();
+      _binormals = FbxLayerElement<Vector3>();
     }
     return _binormals;
   }
@@ -27,7 +27,7 @@ class FbxLayer {
 
   FbxLayerElement<Vector3> get tangents {
     if (_tangents == null) {
-      _tangents = new FbxLayerElement<Vector3>();
+      _tangents = FbxLayerElement<Vector3>();
     }
     return _tangents;
   }
@@ -37,7 +37,7 @@ class FbxLayer {
 
   FbxLayerElement<Vector2> get uvs {
     if (_uvs == null) {
-      _uvs = new FbxLayerElement<Vector2>();
+      _uvs = FbxLayerElement<Vector2>();
     }
     return _uvs;
   }
@@ -47,7 +47,7 @@ class FbxLayer {
 
   FbxLayerElement<Vector4> get colors {
     if (_colors == null) {
-      _colors = new FbxLayerElement<Vector4>();
+      _colors = FbxLayerElement<Vector4>();
     }
     return _colors;
   }

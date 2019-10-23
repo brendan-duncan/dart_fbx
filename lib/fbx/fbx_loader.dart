@@ -29,17 +29,17 @@ import 'scene/fbx_global_settings.dart';
 /// Decodes an FBX file into an [FbxScene] structure.
 class FbxLoader {
   FbxScene load(List<int> bytes) {
-    InputBuffer input = new InputBuffer(bytes);
+    InputBuffer input = InputBuffer(bytes);
 
     if (FbxBinaryParser.isValidFile(input)) {
-      _parser = new FbxBinaryParser(input);
+      _parser = FbxBinaryParser(input);
     } else if (FbxAsciiParser.isValidFile(input)) {
-      _parser = new FbxAsciiParser(input);
+      _parser = FbxAsciiParser(input);
     } else {
       return null;
     }
 
-    FbxScene scene = new FbxScene();
+    FbxScene scene = FbxScene();
 
     FbxElement elem = _parser.nextElement();
     while (elem != null) {
@@ -56,7 +56,7 @@ class FbxLoader {
     if (e.id == 'FBXHeaderExtension') {
       _loadHeaderExtension(e, scene);
     } else if (e.id == 'GlobalSettings') {
-      FbxGlobalSettings node = new FbxGlobalSettings(e, scene);
+      FbxGlobalSettings node = FbxGlobalSettings(e, scene);
       scene.globalSettings = node;
     } else if (e.id == 'Objects') {
       _loadObjects(e, scene);
@@ -111,55 +111,55 @@ class FbxLoader {
     if (c.properties[0] == 'Transform') {
       for (FbxElement c2 in c.children) {
         if (c2.properties[0] == 'T') {
-          FbxAnimCurveNode animNode = new FbxAnimCurveNode(0, 'T', null, scene);
+          FbxAnimCurveNode animNode = FbxAnimCurveNode(0, 'T', null, scene);
           obj.connectToProperty('Lcl Translation', animNode);
           for (FbxElement c3 in c2.children) {
             if (c3.id == 'Channel' && c3.properties[0] == 'X') {
-              FbxAnimCurve animCurve = new FbxAnimCurve(0, 'X', null, scene);
+              FbxAnimCurve animCurve = FbxAnimCurve(0, 'X', null, scene);
               animNode.connectToProperty('X', animCurve);
               _loadTakeCurve(c3, animCurve);
             } else if (c3.id == 'Channel' && c3.properties[0] == 'Y') {
-              FbxAnimCurve animCurve = new FbxAnimCurve(0, 'Y', null, scene);
+              FbxAnimCurve animCurve = FbxAnimCurve(0, 'Y', null, scene);
               animNode.connectToProperty('Y', animCurve);
               _loadTakeCurve(c3, animCurve);
             } else if (c3.id == 'Channel' && c3.properties[0] == 'Z') {
-              FbxAnimCurve animCurve = new FbxAnimCurve(0, 'Z', null, scene);
+              FbxAnimCurve animCurve = FbxAnimCurve(0, 'Z', null, scene);
               animNode.connectToProperty('Z', animCurve);
               _loadTakeCurve(c3, animCurve);
             }
           }
         } else if (c2.properties[0] == 'R') {
-          FbxAnimCurveNode animNode = new FbxAnimCurveNode(0, 'R', null, scene);
+          FbxAnimCurveNode animNode = FbxAnimCurveNode(0, 'R', null, scene);
           obj.connectToProperty('Lcl Rotation', animNode);
           for (FbxElement c3 in c2.children) {
             if (c3.id == 'Channel' && c3.properties[0] == 'X') {
-              FbxAnimCurve animCurve = new FbxAnimCurve(0, 'X', null, scene);
+              FbxAnimCurve animCurve = FbxAnimCurve(0, 'X', null, scene);
               animNode.connectToProperty('X', animCurve);
               _loadTakeCurve(c3, animCurve);
             } else if (c3.id == 'Channel' && c3.properties[0] == 'Y') {
-              FbxAnimCurve animCurve = new FbxAnimCurve(0, 'Y', null, scene);
+              FbxAnimCurve animCurve = FbxAnimCurve(0, 'Y', null, scene);
               animNode.connectToProperty('Y', animCurve);
               _loadTakeCurve(c3, animCurve);
             } else if (c3.id == 'Channel' && c3.properties[0] == 'Z') {
-              FbxAnimCurve animCurve = new FbxAnimCurve(0, 'Z', null, scene);
+              FbxAnimCurve animCurve = FbxAnimCurve(0, 'Z', null, scene);
               animNode.connectToProperty('Z', animCurve);
               _loadTakeCurve(c3, animCurve);
             }
           }
         } else if (c2.properties[0] == 'S') {
-          FbxAnimCurveNode animNode = new FbxAnimCurveNode(0, 'S', null, scene);
+          FbxAnimCurveNode animNode = FbxAnimCurveNode(0, 'S', null, scene);
           obj.connectToProperty('Lcl Scaling', animNode);
           for (FbxElement c3 in c2.children) {
             if (c3.id == 'Channel' && c3.properties[0] == 'X') {
-              FbxAnimCurve animCurve = new FbxAnimCurve(0, 'X', null, scene);
+              FbxAnimCurve animCurve = FbxAnimCurve(0, 'X', null, scene);
               animNode.connectToProperty('X', animCurve);
               _loadTakeCurve(c3, animCurve);
             } else if (c3.id == 'Channel' && c3.properties[0] == 'Y') {
-              FbxAnimCurve animCurve = new FbxAnimCurve(0, 'Y', null, scene);
+              FbxAnimCurve animCurve = FbxAnimCurve(0, 'Y', null, scene);
               animNode.connectToProperty('Y', animCurve);
               _loadTakeCurve(c3, animCurve);
             } else if (c3.id == 'Channel' && c3.properties[0] == 'Z') {
-              FbxAnimCurve animCurve = new FbxAnimCurve(0, 'Z', null, scene);
+              FbxAnimCurve animCurve = FbxAnimCurve(0, 'Z', null, scene);
               animNode.connectToProperty('Z', animCurve);
               _loadTakeCurve(c3, animCurve);
             }
@@ -167,11 +167,11 @@ class FbxLoader {
         }
       }
     } else if (c.properties[0] == 'Visibility') {
-      FbxAnimCurveNode animNode = new FbxAnimCurveNode(0, 'Visibility', null,
+      FbxAnimCurveNode animNode = FbxAnimCurveNode(0, 'Visibility', null,
                                                        scene);
       obj.connectToProperty('Visibility', animNode);
 
-      FbxAnimCurve animCurve = new FbxAnimCurve(0, 'Visibility', null, scene);
+      FbxAnimCurve animCurve = FbxAnimCurve(0, 'Visibility', null, scene);
       _loadTakeCurve(c, animCurve);
     }
   }
@@ -185,7 +185,7 @@ class FbxLoader {
           int time = c.getInt(pi);
           double value = c.getDouble(pi + 1);
 
-          animCurve.keys.add(new FbxAnimKey(time, value,
+          animCurve.keys.add(FbxAnimKey(time, value,
               FbxAnimKey.INTERPOLATION_LINEAR));
 
           String type = c.properties[pi + 2].toString();
@@ -205,7 +205,7 @@ class FbxLoader {
             pi += 7;
           }
 
-          animCurve.keys.add(new FbxAnimKey(time, value, keyType));
+          animCurve.keys.add(FbxAnimKey(time, value, keyType));
         }
       }
     }
@@ -305,13 +305,13 @@ class FbxLoader {
         FbxObject node;
 
         if (type == 'Camera') {
-          FbxCamera camera = new FbxCamera(id, name, c, scene);
+          FbxCamera camera = FbxCamera(id, name, c, scene);
           node = camera;
           scene.allObjects[rawName] = camera;
           scene.allObjects[name] = camera;
           scene.cameras.add(camera);
         } else if (type == 'Light') {
-          FbxLight light = new FbxLight(id, name, c, scene);
+          FbxLight light = FbxLight(id, name, c, scene);
           node = light;
           scene.allObjects[rawName] = light;
           scene.allObjects[name] = light;
@@ -321,21 +321,21 @@ class FbxLoader {
           // meshNode, rather than being a separate NodeAttribute; so we'll
           // split the nodes in that case.
           if (id == 0) {
-            FbxNode meshNode = new FbxNode(id, name, 'Transform', c, scene);
+            FbxNode meshNode = FbxNode(id, name, 'Transform', c, scene);
             scene.allObjects[rawName] = meshNode;
             scene.allObjects[name] = meshNode;
 
-            FbxMesh mesh = new FbxMesh(id, c, scene);
+            FbxMesh mesh = FbxMesh(id, c, scene);
             node = mesh;
             scene.meshes.add(mesh);
             meshNode.connectTo(mesh);
           } else {
-            node = new FbxNode(id, name, 'Transform', c, scene);
+            node = FbxNode(id, name, 'Transform', c, scene);
             scene.allObjects[rawName] = node;
             scene.allObjects[name] = node;
           }
         } else if (type == 'Limb' || type == 'LimbNode') {
-          FbxSkeleton limb = new FbxSkeleton(id, name, type, c, scene);
+          FbxSkeleton limb = FbxSkeleton(id, name, type, c, scene);
           node = limb;
           scene.allObjects[rawName] = limb;
           scene.allObjects[name] = limb;
@@ -345,13 +345,13 @@ class FbxLoader {
           if (tk.length > 1) {
             name = tk[1];
 
-            node = new FbxNode(id, name, type, c, scene);
+            node = FbxNode(id, name, type, c, scene);
             scene.allObjects[rawName] = node;
             scene.allObjects[name] = node;
 
             node.reference = tk[0];
           } else {
-            node = new FbxNode(id, name, type, c, scene);
+            node = FbxNode(id, name, type, c, scene);
             scene.allObjects[rawName] = node;
             scene.allObjects[name] = node;
           }
@@ -365,7 +365,7 @@ class FbxLoader {
         String type = c.properties[2];
 
         if (type == 'Mesh' || type == 'Shape') {
-          FbxMesh mesh = new FbxMesh(id, c, scene);
+          FbxMesh mesh = FbxMesh(id, c, scene);
 
           if (id != 0) {
             scene.allObjects[id.toString()] = mesh;
@@ -386,7 +386,7 @@ class FbxLoader {
 
         String name = _parser.getName(rawName);
 
-        FbxMaterial material = new FbxMaterial(id, name, c, scene);
+        FbxMaterial material = FbxMaterial(id, name, c, scene);
         scene.allObjects[rawName] = material;
         scene.allObjects[name] = material;
         if (id != 0) {
@@ -407,7 +407,7 @@ class FbxLoader {
 
         String name = _parser.getName(rawName);
 
-        FbxAnimStack stack = new FbxAnimStack(id, name, c, scene);
+        FbxAnimStack stack = FbxAnimStack(id, name, c, scene);
         if (id != 0) {
           scene.allObjects[id.toString()] = stack;
         }
@@ -428,7 +428,7 @@ class FbxLoader {
 
         String name = _parser.getName(rawName);
 
-        FbxAnimLayer layer = new FbxAnimLayer(id, name, c, scene);
+        FbxAnimLayer layer = FbxAnimLayer(id, name, c, scene);
         if (id != 0) {
           scene.allObjects[id.toString()] = layer;
         }
@@ -451,7 +451,7 @@ class FbxLoader {
 
         String name = _parser.getName(rawName);
 
-        FbxAnimCurveNode curve = new FbxAnimCurveNode(id, name, c, scene);
+        FbxAnimCurveNode curve = FbxAnimCurveNode(id, name, c, scene);
         if (id != 0) {
           scene.allObjects[id.toString()] = curve;
         }
@@ -475,7 +475,7 @@ class FbxLoader {
         String name = _parser.getName(rawName);
 
         if (type == 'Skin') {
-          FbxSkinDeformer skin = new FbxSkinDeformer(id, name, c, scene);
+          FbxSkinDeformer skin = FbxSkinDeformer(id, name, c, scene);
           scene.deformers.add(skin);
           scene.allObjects[rawName] = skin;
           scene.allObjects[name] = skin;
@@ -483,7 +483,7 @@ class FbxLoader {
             scene.allObjects[id.toString()] = skin;
           }
         } else if (type == 'Cluster') {
-          FbxCluster cluster = new FbxCluster(id, name, c, scene);
+          FbxCluster cluster = FbxCluster(id, name, c, scene);
           scene.deformers.add(cluster);
           scene.allObjects[rawName] = cluster;
           scene.allObjects[name] = cluster;
@@ -506,7 +506,7 @@ class FbxLoader {
 
         String name = _parser.getName(rawName);
 
-        FbxTexture texture = new FbxTexture(id, name, c, scene);
+        FbxTexture texture = FbxTexture(id, name, c, scene);
 
         scene.textures.add(texture);
         scene.allObjects[rawName] = texture;
@@ -528,7 +528,7 @@ class FbxLoader {
 
         String name = _parser.getName(rawName);
 
-        FbxObject folder = new FbxObject(id, name, c.id, c, scene);
+        FbxObject folder = FbxObject(id, name, c.id, c, scene);
         scene.allObjects[rawName] = folder;
         scene.allObjects[name] = folder;
         if (id != 0) {
@@ -548,7 +548,7 @@ class FbxLoader {
 
         String name = _parser.getName(rawName);
 
-        FbxObject constraint = new FbxObject(id, name, c.id, c, scene);
+        FbxObject constraint = FbxObject(id, name, c.id, c, scene);
         scene.allObjects[rawName] = constraint;
         scene.allObjects[name] = constraint;
         if (id != 0) {
@@ -568,7 +568,7 @@ class FbxLoader {
 
         String name = _parser.getName(rawName);
 
-        FbxAnimCurve animCurve = new FbxAnimCurve(id, name, c, scene);
+        FbxAnimCurve animCurve = FbxAnimCurve(id, name, c, scene);
         scene.allObjects[rawName] = animCurve;
         scene.allObjects[name] = animCurve;
         if (id != 0) {
@@ -588,20 +588,20 @@ class FbxLoader {
 
         String name = _parser.getName(rawName);
 
-        FbxNodeAttribute node = new FbxNodeAttribute(id, name, c.id, c, scene);
+        FbxNodeAttribute node = FbxNodeAttribute(id, name, c.id, c, scene);
         scene.allObjects[rawName] = node;
         scene.allObjects[name] = node;
         if (id != 0) {
           scene.allObjects[id.toString()] = node;
         }
       } else if (c.id == 'GlobalSettings') {
-        FbxGlobalSettings node = new FbxGlobalSettings(c, scene);
+        FbxGlobalSettings node = FbxGlobalSettings(c, scene);
         scene.globalSettings = node;
       } else if (c.id == 'SceneInfo') {
-        FbxObject node = new FbxObject(0, 'SceneInfo', c.id, c, scene);
+        FbxObject node = FbxObject(0, 'SceneInfo', c.id, c, scene);
         scene.sceneInfo = node;
       } else if (c.id == 'Pose') {
-        FbxPose pose = new FbxPose(c.properties[0], c.properties[1], c, scene);
+        FbxPose pose = FbxPose(c.properties[0], c.properties[1], c, scene);
         scene.poses.add(pose);
       } else if (c.id == 'Video') {
         int id;
@@ -617,7 +617,7 @@ class FbxLoader {
 
         String name = _parser.getName(rawName);
 
-        FbxVideo video = new FbxVideo(id, name, c.id, c, scene);
+        FbxVideo video = FbxVideo(id, name, c.id, c, scene);
 
         scene.videos.add(video);
         scene.allObjects[rawName] = video;

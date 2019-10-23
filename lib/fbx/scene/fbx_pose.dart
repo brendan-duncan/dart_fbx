@@ -27,7 +27,7 @@ class FbxPose extends FbxObject {
                        c2.children[0].properties.length == 16) ? c2.children[0].properties
                     : null;
             if (p != null) {
-              matrix = new Matrix4.zero();
+              matrix = Matrix4.zero();
               for (int i = 0; i < 16; ++i) {
                 matrix.storage[i] = toDouble(p[i]);
               }
