@@ -9,7 +9,6 @@ import 'fbx_layer.dart';
 import 'fbx_layer_element.dart';
 import 'fbx_mapping_mode.dart';
 import 'fbx_node.dart';
-import 'fbx_object.dart';
 import 'fbx_polygon.dart';
 import 'fbx_pose.dart';
 import 'fbx_reference_mode.dart';
@@ -25,12 +24,12 @@ class FbxMesh extends FbxGeometry {
   List<FbxEdge> edges = [];
   List<FbxLayer> layers = [];
   List<FbxDisplayMesh> display = [];
-  List clusterMap = [];
+  List clusterMap = <dynamic>[];
 
   FbxMesh(int id, FbxElement element, FbxScene scene)
     : super(id, '', 'Mesh', element, scene) {
 
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'Vertices') {
         _loadPoints(c);
       } else if (c.id == 'PolygonVertexIndex') {
@@ -60,17 +59,16 @@ class FbxMesh extends FbxGeometry {
   }
 
   List<FbxSkinDeformer> get skinDeformer {
-    return findConnectionsByType('Skin');
+    return findConnectionsByType('Skin') as List<FbxSkinDeformer>;
   }
 
   List<FbxCluster> _getClusters() {
-    List<FbxCluster> clusters = [];
-    List<FbxObject> skins = findConnectionsByType('Skin');
-    for (FbxSkinDeformer skin in skins) {
-      List<FbxCluster> l = [];
+    final clusters = <FbxCluster>[];
+    final skins = findConnectionsByType('Skin');
+    for (final skin in skins) {
+      final l = <FbxCluster>[];
       skin.findConnectionsByType('Cluster', l);
       for (var c in l) {
-        
         if (c.indexes != null && c.weights != null) {
           clusters.add(c);
         }
@@ -82,14 +80,12 @@ class FbxMesh extends FbxGeometry {
   bool hasDeformedPoints() => _deformedPoints != null;
 
   List<Vector3> get deformedPoints {
-    if (_deformedPoints == null) {
-      _deformedPoints = List<Vector3>(points.length);
-    }
+    _deformedPoints ??= List<Vector3>(points.length);
     return _deformedPoints;
   }
 
   void computeDeformations() {
-    FbxNode meshNode = getConnectedFrom(0);
+    final meshNode = getConnectedFrom(0) as FbxNode;
     if (meshNode == null) {
       return;
     }
@@ -98,15 +94,15 @@ class FbxMesh extends FbxGeometry {
   }
 
   void updateDisplayMesh() {
-    List<Vector3> pts = _deformedPoints != null ? _deformedPoints : points;
+    var pts = _deformedPoints ?? points;
     if (_deformedPoints[0] == null) {
       pts = points;
     }
 
-    FbxDisplayMesh disp = display[0];
-    for (int pi = 0, len = pts.length; pi < len; ++pi) {
-      for (int vi = 0; vi < disp.pointMap[pi].length; ++vi) {
-        int dpi = disp.pointMap[pi][vi];
+    final disp = display[0];
+    for (var pi = 0, len = pts.length; pi < len; ++pi) {
+      for (var vi = 0; vi < disp.pointMap[pi].length; ++vi) {
+        final dpi = disp.pointMap[pi][vi];
         disp.points[dpi] = pts[pi].x;
         disp.points[dpi + 1] = pts[pi].y;
         disp.points[dpi + 2] = pts[pi].z;
@@ -115,22 +111,19 @@ class FbxMesh extends FbxGeometry {
   }
 
   Float32List computeSkinPalette([Float32List data]) {
-    FbxNode meshNode = getConnectedFrom(0);
+    final meshNode = getConnectedFrom(0) as FbxNode;
     if (meshNode == null) {
       return null;
     }
 
+    data ??= Float32List(_clusters.length * 16);
 
-    if (data == null) {
-      data = Float32List(_clusters.length * 16);
-    }
+    final pose = scene.getPose(0);
 
-    FbxPose pose = scene.getPose(0);
-
-    for (int i = 0, j = 0, len = _clusters.length; i < len; ++i) {
-      FbxCluster cluster = _clusters[i];
-      Matrix4 w = _getClusterMatrix(meshNode, cluster, pose);
-      for (int k = 0; k < 16; ++k) {
+    for (var i = 0, j = 0, len = _clusters.length; i < len; ++i) {
+      final cluster = _clusters[i];
+      final w = _getClusterMatrix(meshNode, cluster, pose);
+      for (var k = 0; k < 16; ++k) {
         data[j++] = w.storage[k];
       }
     }
@@ -139,29 +132,29 @@ class FbxMesh extends FbxGeometry {
   }
 
   void computeLinearBlendSkinning(FbxNode meshNode) {
-    List<Vector3> outPoints = deformedPoints;
-    FbxPose pose = scene.getPose(0);
+    final outPoints = deformedPoints;
+    final pose = scene.getPose(0);
 
-    for (int pi = 0, len = points.length; pi < len; ++pi) {
-      if (clusterMap[pi] == null || clusterMap[pi].isEmpty) {
+    for (var pi = 0, len = points.length; pi < len; ++pi) {
+      if (clusterMap[pi] == null || (clusterMap[pi] as List).isEmpty) {
         continue;
       }
 
-      Vector3 sp = Vector3.zero();
-      Vector3 p = points[pi];
-      double weightSum = 0.0;
+      var sp = Vector3.zero();
+      var p = points[pi];
+      var weightSum = 0.0;
 
-      int clusterMode = FbxCluster.NORMALIZE;
+      var clusterMode = FbxCluster.NORMALIZE;
 
-      for (List clusterWeight in clusterMap[pi]) {
-        FbxCluster cluster = clusterWeight[0];
-        double weight = clusterWeight[1];
+      for (var clusterWeight in clusterMap[pi]) {
+        final cluster = clusterWeight[0] as FbxCluster;
+        final weight = clusterWeight[1] as double;
 
         clusterMode = cluster.linkMode;
 
-        Matrix4 w = _getClusterMatrix(meshNode, cluster, pose);
+        final w = _getClusterMatrix(meshNode, cluster, pose);
 
-        sp += (w * p) * weight;
+        sp += ((w * p) as Vector3) * weight;
 
         weightSum += weight;
       }
@@ -179,40 +172,41 @@ class FbxMesh extends FbxGeometry {
   }
 
   Matrix4 _getClusterMatrix(FbxNode meshNode, FbxCluster cluster,
-                            FbxPose pose) {
-    FbxNode joint = cluster.getLink();
+      FbxPose pose) {
+    final joint = cluster.getLink();
 
-    Matrix4 refGlobalInitPos = pose.getMatrix(meshNode);
+    final refGlobalInitPos = pose.getMatrix(meshNode);
 
-    Matrix4 refGlobalCurrentPos = meshNode.evalGlobalTransform();
+    final refGlobalCurrentPos = meshNode.evalGlobalTransform();
 
-    Matrix4 clusterGlobalInitPos = inverseMat(cluster.transformLink);
+    final clusterGlobalInitPos = inverseMat(cluster.transformLink);
 
-    Matrix4 clusterGlobalCurrentPos = joint.evalGlobalTransform();
+    final clusterGlobalCurrentPos = joint.evalGlobalTransform();
 
-    Matrix4 clusterRelativeInitPos = clusterGlobalInitPos * refGlobalInitPos;
+    final clusterRelativeInitPos =
+        (clusterGlobalInitPos * refGlobalInitPos) as Matrix4;
 
-    Matrix4 clusterRelativeCurrentPosInverse = inverseMat(refGlobalCurrentPos)
-                                               * clusterGlobalCurrentPos;
+    final clusterRelativeCurrentPosInverse =
+        (inverseMat(refGlobalCurrentPos) * clusterGlobalCurrentPos) as Matrix4;
 
-    Matrix4 vertexTransform = clusterRelativeCurrentPosInverse
-                              * clusterRelativeInitPos;
+    final vertexTransform =
+        (clusterRelativeCurrentPosInverse * clusterRelativeInitPos) as Matrix4;
 
     return vertexTransform;
   }
 
   void generateClusterMap() {
-    clusterMap = List(points.length);
+    clusterMap = List<dynamic>(points.length);
 
-    for (FbxCluster cluster in _clusters) {
+    for (final cluster in _clusters) {
       if (cluster.indexes == null || cluster.weights == null) {
         continue;
       }
 
-      for (int i = 0; i < cluster.indexes.length; ++i) {
-        int pi = cluster.indexes[i];
+      for (var i = 0; i < cluster.indexes.length; ++i) {
+        var pi = cluster.indexes[i];
         if (clusterMap[pi] == null) {
-          clusterMap[pi] = [];
+          clusterMap[pi] = <dynamic>[];
         }
         clusterMap[pi].add([cluster, cluster.weights[i]]);
       }
@@ -229,10 +223,10 @@ class FbxMesh extends FbxGeometry {
     _clusters = _getClusters();
     generateClusterMap();
 
-    FbxDisplayMesh disp = FbxDisplayMesh();
+    final disp = FbxDisplayMesh();
     display.add(disp);
 
-    bool splitPolygonVerts = false;
+    var splitPolygonVerts = false;
 
     FbxLayer layer;
     FbxLayerElement<Vector3> normals;
@@ -259,16 +253,16 @@ class FbxMesh extends FbxGeometry {
     disp.pointMap = List<List<int>>(points.length);
 
     if (splitPolygonVerts) {
-      int triCount = 0;
-      int numPoints = 0;
-      for (FbxPolygon poly in polygons) {
+      var triCount = 0;
+      var numPoints = 0;
+      for (final poly in polygons) {
         triCount += poly.vertices.length - 2;
         numPoints += poly.vertices.length;
       }
 
       disp.numPoints = numPoints;
       disp.points = Float32List(numPoints * 3);
-      disp.vertices = Uint16List(triCount * 3);
+      disp.indices = Uint16List(triCount * 3);
 
       if (normals != null) {
         disp.normals = Float32List(disp.points.length);
@@ -278,19 +272,19 @@ class FbxMesh extends FbxGeometry {
         disp.uvs = Float32List(disp.points.length);
       }
 
-      int pi = 0;
-      int ni = 0;
-      int ni2 = 0;
-      int ti = 0;
-      int ti2 = 0;
+      var pi = 0;
+      var ni = 0;
+      var ni2 = 0;
+      var ti = 0;
+      var ti2 = 0;
 
-      for (FbxPolygon poly in polygons) {
-        for (int vi = 0, len = poly.vertices.length; vi < len;
+      for (final poly in polygons) {
+        for (var vi = 0, len = poly.vertices.length; vi < len;
              ++vi, ++ni2, ++ti2) {
-          int p1 = poly.vertices[vi];
+          var p1 = poly.vertices[vi];
 
           if (disp.pointMap[p1] == null) {
-            disp.pointMap[p1] = List<int>();
+            disp.pointMap[p1] = <int>[];
           }
           disp.pointMap[p1].add(pi);
 
@@ -320,12 +314,12 @@ class FbxMesh extends FbxGeometry {
       }
 
       pi = 0;
-      int xi = 0;
-      for (FbxPolygon poly in polygons) {
-        for (int vi = 2, len = poly.vertices.length; vi < len; ++vi) {
-          disp.vertices[xi++] = pi;
-          disp.vertices[xi++] = pi + (vi - 1);
-          disp.vertices[xi++] = pi + vi;
+      var xi = 0;
+      for (final poly in polygons) {
+        for (var vi = 2, len = poly.vertices.length; vi < len; ++vi) {
+          disp.indices[xi++] = pi;
+          disp.indices[xi++] = pi + (vi - 1);
+          disp.indices[xi++] = pi + vi;
         }
         pi += poly.vertices.length;
       }
@@ -333,7 +327,7 @@ class FbxMesh extends FbxGeometry {
       disp.numPoints = points.length;
       disp.points = Float32List(points.length * 3);
 
-      for (int xi = 0, pi = 0, len = points.length; xi < len; ++xi) {
+      for (var xi = 0, pi = 0, len = points.length; xi < len; ++xi) {
         disp.pointMap[xi] = [pi];
 
         disp.points[pi++] = points[xi].x;
@@ -344,7 +338,7 @@ class FbxMesh extends FbxGeometry {
       if (normals != null) {
         disp.normals = Float32List(disp.points.length);
 
-        for (int vi = 0, ni = 0, len = normals.data.length; ni < len; ++ni) {
+        for (var vi = 0, ni = 0, len = normals.data.length; ni < len; ++ni) {
           disp.normals[vi++] = normals[ni].x;
           disp.normals[vi++] = normals[ni].y;
           disp.normals[vi++] = normals[ni].z;
@@ -354,24 +348,23 @@ class FbxMesh extends FbxGeometry {
       if (uvs != null) {
         disp.uvs = Float32List(points.length * 2);
 
-        for (int vi = 0, ni = 0, len = uvs.data.length; ni < len; ++ni) {
+        for (var vi = 0, ni = 0, len = uvs.data.length; ni < len; ++ni) {
           disp.uvs[vi++] = uvs[ni].x;
           disp.uvs[vi++] = uvs[ni].y;
         }
       }
 
-      List<int> verts = [];
+      final verts = <int>[];
 
-      int pi = 0;
-      for (FbxPolygon poly in polygons) {
-        for (int vi = 2, len = poly.vertices.length; vi < len; ++vi) {
+      for (final poly in polygons) {
+        for (var vi = 2, len = poly.vertices.length; vi < len; ++vi) {
           verts.add(poly.vertices[0]);
           verts.add(poly.vertices[vi - 1]);
           verts.add(poly.vertices[vi]);
         }
       }
 
-      disp.vertices = Uint16List.fromList(verts);
+      disp.indices = Uint16List.fromList(verts);
     }
 
     if (disp.normals == null) {
@@ -382,22 +375,22 @@ class FbxMesh extends FbxGeometry {
       disp.skinWeights = Float32List(disp.numPoints * 4);
       disp.skinIndices = Float32List(disp.numPoints * 4);
 
-      Int32List count = Int32List(points.length);
+      final count = Int32List(points.length);
 
-      for (int ci = 0, len = _clusters.length; ci < len; ++ci) {
-        double index = ci.toDouble();
+      for (var ci = 0, len = _clusters.length; ci < len; ++ci) {
+        final index = ci.toDouble();
 
-        FbxCluster cluster = _clusters[ci];
+        final cluster = _clusters[ci];
 
-        for (int xi = 0, numPts = cluster.indexes.length; xi < numPts; ++xi) {
-          double weight = cluster.weights[xi];
-          int pi = cluster.indexes[xi];
+        for (var xi = 0, numPts = cluster.indexes.length; xi < numPts; ++xi) {
+          final weight = cluster.weights[xi];
+          final pi = cluster.indexes[xi];
 
-          for (int vi = 0, nv = disp.pointMap[pi].length; vi < nv; ++vi) {
-            int pv = (disp.pointMap[pi][vi] ~/ 3) * 4;
+          for (var vi = 0, nv = disp.pointMap[pi].length; vi < nv; ++vi) {
+            final pv = (disp.pointMap[pi][vi] ~/ 3) * 4;
 
             if (count[pi] > 3) {
-              for (int cc = 0; cc < 4; ++cc) {
+              for (var cc = 0; cc < 4; ++cc) {
                 if (disp.skinWeights[pv + cc] < weight) {
                   disp.skinIndices[pv + cc] = index;
                   disp.skinWeights[pv + cc] = weight;
@@ -405,7 +398,7 @@ class FbxMesh extends FbxGeometry {
                 }
               }
             } else {
-              int wi = pv + count[pi];
+              final wi = pv + count[pi];
               disp.skinIndices[wi] = index;
               disp.skinWeights[wi] = weight;
             }
@@ -419,13 +412,13 @@ class FbxMesh extends FbxGeometry {
 
 
   void _loadPoints(FbxElement e) {
-    var p = (e.properties.length == 1 && e.properties[0] is List) ? e.properties[0]
+    var p = ((e.properties.length == 1 && e.properties[0] is List) ? e.properties[0]
             : (e.children.length == 1) ? e.children[0].properties
-            : e.properties;
+            : e.properties) as List;
 
     points = List(p.length ~/ 3);
 
-    for (int i = 0, j = 0, len = p.length; i < len; i += 3) {
+    for (var i = 0, j = 0, len = p.length; i < len; i += 3) {
       points[j++] = Vector3(toDouble(p[i]), toDouble(p[i + 1]),
                                 toDouble(p[i + 2]));
     }
@@ -433,26 +426,28 @@ class FbxMesh extends FbxGeometry {
 
 
   void _loadPolygons(FbxElement e) {
-    var p = (e.properties.length == 1 && e.properties[0] is List) ? e.properties[0]
-            : (e.children.length == 1) ? e.children[0].properties
-            : e.properties;
+    var p = ((e.properties.length == 1 && e.properties[0] is List)
+            ? e.properties[0]
+            : (e.children.length == 1)
+            ? e.children[0].properties
+            : e.properties) as List;
 
     polygonVertexCount = p.length;
 
-    int polygonStart = 0;
+    var polygonStart = 0;
 
     // Triangulate the mesh while we're parsing it.
-    for (int i = 0, len = p.length; i < len; ++i) {
-      int vi = toInt(p[i]);
+    for (var i = 0, len = p.length; i < len; ++i) {
+      var vi = toInt(p[i]);
 
       // negative index indicates the end of a polygon
       if (vi < 0) {
         vi = ~vi;
 
-        FbxPolygon poly = FbxPolygon();
+        final poly = FbxPolygon();
         polygons.add(poly);
 
-        for (int xi = polygonStart; xi < i; ++xi) {
+        for (var xi = polygonStart; xi < i; ++xi) {
           poly.vertices.add(toInt(p[xi]));
         }
         poly.vertices.add(vi);
@@ -477,27 +472,30 @@ class FbxMesh extends FbxGeometry {
 
 
   void _loadNormals(FbxElement e) {
-    int layerIndex = toInt(e.properties[0]);
-    FbxLayer layer = getLayer(layerIndex);
+    final layerIndex = toInt(e.properties[0]);
+    final layer = getLayer(layerIndex);
 
-    FbxLayerElement<Vector3> normals = layer.normals;
+    final normals = layer.normals;
 
-    for (FbxElement c in e.children) {
+    for (final c in e.children) {
       if (c.properties.isEmpty) {
         continue;
       }
 
       if (c.id == 'MappingInformationType') {
-        normals.mappingMode = stringToMappingMode(c.properties[0]);
+        normals.mappingMode = stringToMappingMode(c.properties[0] as String);
       } else if (c.id == 'ReferenceInformationType') {
-        normals.referenceMode = stringToReferenceMode(c.properties[0]);
+        normals.referenceMode =
+            stringToReferenceMode(c.properties[0] as String);
       } else if (c.id == 'Normals') {
-        var p = (c.properties.length == 1 && c.properties[0] is List) ? c.properties[0]
-                : (c.children.length == 1) ? c.children[0].properties
-                : c.properties;
+        var p = ((c.properties.length == 1 && c.properties[0] is List)
+                ? c.properties[0]
+                : (c.children.length == 1)
+                ? c.children[0].properties
+                : c.properties) as List;
 
         normals.data = List<Vector3>(p.length ~/ 3);
-        for (int i = 0, j = 0, len = p.length; i < len; i += 3) {
+        for (var i = 0, j = 0, len = p.length; i < len; i += 3) {
           normals.data[j++] = Vector3(toDouble(p[i]),
               toDouble(p[i + 1]),
               toDouble(p[i + 2]));
@@ -507,23 +505,25 @@ class FbxMesh extends FbxGeometry {
   }
 
   void _loadUvs(FbxElement e) {
-    int layerIndex = toInt(e.properties[0]);
-    FbxLayer layer = getLayer(layerIndex);
+    final layerIndex = toInt(e.properties[0]);
+    final layer = getLayer(layerIndex);
 
-    FbxLayerElement<Vector2> uvs = layer.uvs;
+    final uvs = layer.uvs;
 
-    for (FbxElement c in e.children) {
-      var p = (c.properties.length == 1 && c.properties[0] is List) ? c.properties[0]
-              : (c.children.length == 1) ? c.children[0].properties
-              : c.properties;
+    for (final c in e.children) {
+      var p = ((c.properties.length == 1 && c.properties[0] is List)
+               ? c.properties[0]
+               : (c.children.length == 1)
+               ? c.children[0].properties
+               : c.properties) as List;
 
       if (c.id == 'MappingInformationType') {
-        uvs.mappingMode = stringToMappingMode(p[0]);
+        uvs.mappingMode = stringToMappingMode(p[0] as String);
       } else if (c.id == 'ReferenceInformationType') {
-        uvs.referenceMode = stringToReferenceMode(p[0]);
+        uvs.referenceMode = stringToReferenceMode(p[0] as String);
       } else if (c.id == 'UV' && p.isNotEmpty) {
         uvs.data = List<Vector2>(p.length ~/ 2);
-        for (int i = 0, j = 0, len = p.length; i < len; i += 2) {
+        for (var i = 0, j = 0, len = p.length; i < len; i += 2) {
           uvs.data[j++] = Vector2(toDouble(p[i]), toDouble(p[i + 1]));
         }
       }

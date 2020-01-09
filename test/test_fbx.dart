@@ -1,4 +1,4 @@
-import '../lib/fbx.dart';
+import 'package:fbx/fbx.dart';
 import 'package:test/test.dart';
 import 'dart:io';
 
@@ -23,8 +23,8 @@ var files = [
 void loadFile(String filename) {
   var bytes = File(filename).readAsBytesSync();
   var scene = FbxLoader().load(bytes);
-  for (FbxMesh mesh in scene.meshes) {
-    FbxNode meshNode = mesh.getParentNode();
+  for (final mesh in scene.meshes) {
+    final meshNode = mesh.getParentNode();
     if (meshNode == null) {
       continue;
     }

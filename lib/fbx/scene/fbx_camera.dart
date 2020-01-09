@@ -26,7 +26,7 @@ class FbxCamera extends FbxNodeAttribute {
     nearPlane = addProperty('NearPlane', 1.0);
     farPlane = addProperty('FarPlane', 10000.0);
 
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'CameraOrthoZoom') {
         cameraOrthoZoom.value = c.getDouble(0);
       } else if (c.id == 'LookAt') {
@@ -34,7 +34,7 @@ class FbxCamera extends FbxNodeAttribute {
       } else if (c.id == 'Position') {
         position.value = Vector3(c.getDouble(0), c.getDouble(1), c.getDouble(2));
       } else if (c.id == 'Properties60') {
-        for (FbxElement p in c.children) {
+        for (final p in c.children) {
           if (p.id == 'Property') {
             if (p.properties[0] == 'Roll') {
               roll.value = p.getDouble(3);

@@ -24,36 +24,36 @@ class FbxNode extends FbxObject {
     scale = addProperty('Lcl Scaling', Vector3(1.0, 1.0, 1.0));
     visibility = addProperty('Visibility', 1);
 
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'Properties70') {
-        for (FbxElement p in c.children) {
+        for (final p in c.children) {
           if (p.id == 'P') {
             if (p.properties[0] == 'Lcl Translation') {
               translate.value = Vector3(p.getDouble(4), p.getDouble(5),
-                                            p.getDouble(6));
+                  p.getDouble(6));
             } else if (p.properties[0] == 'Lcl Rotation') {
               rotate.value = Vector3(p.getDouble(4), p.getDouble(5),
-                                         p.getDouble(6));
+                  p.getDouble(6));
             } else if (p.properties[0] == 'Lcl Scaling') {
               scale.value = Vector3(p.getDouble(4), p.getDouble(5),
-                                        p.getDouble(6));
+                  p.getDouble(6));
             } else if (p.properties[0] == 'Visibility') {
               visibility.value = p.getInt(4);
             }
           }
         }
       } else if (c.id == 'Properties60') {
-        for (FbxElement p in c.children) {
+        for (final p in c.children) {
           if (p.id == 'Property') {
             if (p.properties[0] == 'Lcl Translation') {
               translate.value = Vector3(p.getDouble(3), p.getDouble(4),
-                                            p.getDouble(5));
+                  p.getDouble(5));
             } else if (p.properties[0] == 'Lcl Rotation') {
               rotate.value = Vector3(p.getDouble(3), p.getDouble(4),
-                                         p.getDouble(5));
+                  p.getDouble(5));
             } else if (p.properties[0] == 'Lcl Scaling') {
               scale.value = Vector3(p.getDouble(3), p.getDouble(4),
-                                        p.getDouble(5));
+                  p.getDouble(5));
             } else if (p.properties[0] == 'Visibility') {
               visibility.value = p.getInt(3);
             }
@@ -65,10 +65,10 @@ class FbxNode extends FbxObject {
     resetLocalTransform();
   }
 
-
+  @override
   void connectTo(FbxObject other) {
     if (other is FbxNode) {
-      FbxNode node = other;
+      final node = other;
       children.add(node);
       node.parent = this;
     } else {
@@ -76,30 +76,29 @@ class FbxNode extends FbxObject {
     }
   }
 
-
   Matrix4 localTransform() => transform;
-
 
   Matrix4 globalTransform() {
     if (parent != null) {
-      return parent.globalTransform() * localTransform();
+      return (parent.globalTransform() * localTransform()) as Matrix4;
     }
     return localTransform();
   }
-
 
   Matrix4 evalLocalTransform() => scene.getNodeLocalTransform(this);
 
   Matrix4 evalGlobalTransform() => scene.getNodeGlobalTransform(this);
 
-
   void resetLocalTransform() {
     transform = Matrix4.identity();
 
-    transform.translate(translate.value.x, translate.value.y, translate.value.z);
-    transform.rotateZ(radians(rotate.value.z));
-    rotateY(transform, radians(rotate.value.y));
-    transform.rotateX(radians(rotate.value.x));
-    transform.scale(scale.value.x, scale.value.y, scale.value.z);
+    final t = translate.value as Vector3;
+    final r = rotate.value as Vector3;
+    final s = scale.value as Vector3;
+    transform.translate(t.x, t.y, t.z);
+    transform.rotateZ(radians(r.z));
+    rotateY(transform, radians(r.y));
+    transform.rotateX(radians(r.x));
+    transform.scale(s.x, s.y, s.z);
   }
 }

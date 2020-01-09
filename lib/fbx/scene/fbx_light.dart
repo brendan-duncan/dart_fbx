@@ -29,9 +29,9 @@ class FbxLight extends FbxNodeAttribute {
     decay = addProperty('Decay', NO_DECAY);
     lightType = addProperty('LightType', DIRECTIONAL);
 
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'Properties60') {
-        for (FbxElement p in c.children) {
+        for (final p in c.children) {
           if (p.id == 'Property') {
             if (p.properties[0] == 'Color') {
               color.value = Vector3(p.getDouble(3), p.getDouble(4),

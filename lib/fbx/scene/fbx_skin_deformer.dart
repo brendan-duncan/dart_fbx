@@ -20,7 +20,7 @@ class FbxSkinDeformer extends FbxDeformer {
     linkDeformAcuracy = addProperty('Link_DeformAcuracy', 50);
     skinningType = addProperty('SkinningType', RIGID);
 
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'Link_DeformAcuracy') {
         linkDeformAcuracy.value = toInt(c.properties[0]);
       } else if (c.id == 'SkinningType') {
@@ -37,5 +37,5 @@ class FbxSkinDeformer extends FbxDeformer {
     }
   }
 
-  List<FbxNode> get clusters => connectedTo;
+  List<FbxNode> get clusters => connectedTo as List<FbxNode>;
 }

@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+//import 'dart:typed_data';
 
 /// Copyright (C) 2015 Brendan Duncan. All rights reserved.
 import '../fbx_element.dart';
@@ -13,14 +13,14 @@ class FbxPose extends FbxObject {
 
   FbxPose(String name, String type, FbxElement element, FbxScene scene)
     : super(0, name, type, element, scene) {
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'Type') {
         poseType = c.getString(0);
       } else if (c.id == 'PoseNode') {
         Matrix4 matrix;
         String nodeName;
 
-        for (FbxElement c2 in c.children) {
+        for (final c2 in c.children) {
           if (c2.id == 'Node') {
             nodeName = c2.properties[0].toString();
           } else if (c2.id == 'Matrix') {
@@ -31,7 +31,7 @@ class FbxPose extends FbxObject {
                     : null;
             if (p != null) {
               matrix = Matrix4.zero();
-              for (int i = 0; i < 16; ++i) {
+              for (var i = 0; i < 16; ++i) {
                 matrix.storage[i] = toDouble(p[i]);
               }
             }
@@ -39,7 +39,7 @@ class FbxPose extends FbxObject {
         }
 
         if (matrix != null && nodeName != null) {
-          FbxObject node = scene.allObjects[nodeName];
+          final node = scene.allObjects[nodeName] as FbxNode;
           if (node != null) {
             data[node] = matrix;
           } else {

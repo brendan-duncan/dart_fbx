@@ -48,10 +48,10 @@ class FbxGlobalSettings extends FbxObject {
     timeSpanStop = addProperty('TimeSpanEnd', 0);
     customFrameRate = addProperty('CustomFrameRate', -1.0);
 
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'Properties60' || c.id == 'Properties70') {
-        int vi = c.id == 'Properties60' ? 3 : 4;
-        for (FbxElement p in c.children) {
+        final vi = c.id == 'Properties60' ? 3 : 4;
+        for (final p in c.children) {
           if (p.properties[0] == 'UpAxis') {
             upAxis.value = p.getInt(vi);
           } else if (p.properties[0] == 'UpAxisSign') {
@@ -94,11 +94,11 @@ class FbxGlobalSettings extends FbxObject {
       }
     }
 
-    scene.startFrame = FbxFrameRate.timeToFrame(timeSpanStart.value,
-                                                timeMode.value);
+    scene.startFrame = FbxFrameRate.timeToFrame(timeSpanStart.value as int,
+                                                timeMode.value as int);
 
-    scene.endFrame = FbxFrameRate.timeToFrame(timeSpanStop.value,
-                                              timeMode.value);
+    scene.endFrame = FbxFrameRate.timeToFrame(timeSpanStop.value as int,
+                                              timeMode.value as int);
 
     scene.currentFrame = scene.startFrame;
   }

@@ -7,6 +7,7 @@ class FbxProperty {
 
   FbxProperty(this.value);
 
+  @override
   String toString() {
     if (connectedFrom != null) {
       return '${value} <--- ${connectedFrom.name}<${connectedFrom.type}>';

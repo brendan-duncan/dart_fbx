@@ -19,9 +19,9 @@ class FbxAnimStack extends FbxObject {
     referenceStart = addProperty('ReferenceStart', 0);
     referenceStop = addProperty('ReferenceStop', 0);
 
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'Properties70') {
-        for (FbxElement c2 in c.children) {
+        for (final c2 in c.children) {
           if (c2.properties[0] == 'Description') {
             description.value = c2.properties[4];
           } else if (c2.properties[0] == 'LocalStart') {

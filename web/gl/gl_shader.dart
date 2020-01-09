@@ -3,12 +3,12 @@ part of fbx_viewer;
 class GlShader {
   GlShader(this._gl, String vsSource, String fsSource) {
     // vertex shader compilation
-    Shader vs = _gl.createShader(WebGL.VERTEX_SHADER);
+    final vs = _gl.createShader(WebGL.VERTEX_SHADER);
     _gl.shaderSource(vs, vsSource);
     _gl.compileShader(vs);
 
     // fragment shader compilation
-    Shader fs = _gl.createShader(WebGL.FRAGMENT_SHADER);
+    final fs = _gl.createShader(WebGL.FRAGMENT_SHADER);
     _gl.shaderSource(fs, fsSource);
     _gl.compileShader(fs);
 
@@ -19,15 +19,15 @@ class GlShader {
     _gl.linkProgram(_shaderProgram);
     _gl.useProgram(_shaderProgram);
 
-    if (!_gl.getShaderParameter(vs, WebGL.COMPILE_STATUS)) {
+    if (!(_gl.getShaderParameter(vs, WebGL.COMPILE_STATUS) as bool)) {
       print(_gl.getShaderInfoLog(vs));
     }
 
-    if (!_gl.getShaderParameter(fs, WebGL.COMPILE_STATUS)) {
+    if (!(_gl.getShaderParameter(fs, WebGL.COMPILE_STATUS) as bool)) {
       print(_gl.getShaderInfoLog(fs));
     }
 
-    if (!_gl.getProgramParameter(_shaderProgram, WebGL.LINK_STATUS)) {
+    if (!(_gl.getProgramParameter(_shaderProgram, WebGL.LINK_STATUS) as bool)) {
       print(_gl.getProgramInfoLog(_shaderProgram));
     }
 
@@ -132,7 +132,7 @@ class GlShader {
 
   void bindGeometry(GlObject obj) {
     if (obj.transform != null) {
-      Matrix4 mvMatrix = _mvMatrix * obj.transform;
+      final mvMatrix = (_mvMatrix * obj.transform) as Matrix4;
       _gl.uniformMatrix4fv(_uMVMatrix, false, mvMatrix.storage);
     } else {
       _gl.uniformMatrix4fv(_uMVMatrix, false, _mvMatrix.storage);
@@ -169,13 +169,13 @@ class GlShader {
     }
   }
 
-  RenderingContext _gl;
+  final RenderingContext _gl;
   Program _shaderProgram;
   int _aVertexPosition;
   int _aVertexNormal;
   UniformLocation _uPMatrix;
   UniformLocation _uMVMatrix;
-  Map<String, UniformLocation> _uniforms = {};
+  final _uniforms = <String, UniformLocation>{};
   bool _drawElements = false;
   int _count = 0;
   Matrix4 _mvMatrix;

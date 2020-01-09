@@ -19,7 +19,7 @@ class FbxAnimCurve extends FbxObject {
     List keyTime;
     List keyValue;
 
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'Default') {
 
       } else if (c.id == 'KeyVer') {
@@ -45,7 +45,7 @@ class FbxAnimCurve extends FbxObject {
 
     if (keyTime != null && keyValue != null) {
       if (keyTime.length == keyValue.length) {
-        for (int i = 0; i < keyTime.length; ++i) {
+        for (var i = 0; i < keyTime.length; ++i) {
           keys.add(FbxAnimKey(toInt(keyTime[i]),
                               toDouble(keyValue[i]),
                               FbxAnimKey.INTERPOLATION_LINEAR));

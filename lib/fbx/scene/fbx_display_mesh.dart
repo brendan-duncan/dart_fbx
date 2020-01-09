@@ -9,51 +9,53 @@ class FbxDisplayMesh {
   Float32List normals;
   Float32List uvs;
   Float32List colors;
-  Uint16List vertices;
+  Uint16List indices;
   Float32List skinWeights;
   Float32List skinIndices;
   List<List<int>> pointMap;
 
+  @deprecated
+  Uint16List get vertices => indices;
 
   void generateSmoothNormals() {
-    if (vertices == null || points == null) {
+    if (indices == null || points == null) {
       return;
     }
 
     // Compute normals
     normals = Float32List(points.length);
-    for (int ti = 0; ti < vertices.length; ti += 3) {
-      Vector3 p1 = Vector3(points[vertices[ti] * 3],
-          points[vertices[ti] * 3 + 1],
-          points[vertices[ti] * 3 + 2]);
+    for (var ti = 0; ti < indices.length; ti += 3) {
+      final p1 = Vector3(points[indices[ti] * 3],
+          points[indices[ti] * 3 + 1],
+          points[indices[ti] * 3 + 2]);
 
-      Vector3 p2 = Vector3(points[vertices[ti + 1] * 3],
-          points[vertices[ti + 1] * 3 + 1],
-          points[vertices[ti + 1] * 3 + 2]);
+      final p2 = Vector3(points[indices[ti + 1] * 3],
+          points[indices[ti + 1] * 3 + 1],
+          points[indices[ti + 1] * 3 + 2]);
 
-      Vector3 p3 = Vector3(points[vertices[ti + 2] * 3],
-          points[vertices[ti + 2] * 3 + 1],
-          points[vertices[ti + 2] * 3 + 2]);
+      final p3 = Vector3(points[indices[ti + 2] * 3],
+          points[indices[ti + 2] * 3 + 1],
+          points[indices[ti + 2] * 3 + 2]);
 
-      Vector3 N = (p2 - p1).cross(p3 - p1);
+      final N = (p2 - p1).cross(p3 - p1);
 
-      normals[vertices[ti] * 3] += N.x;
-      normals[vertices[ti] * 3 + 1] += N.y;
-      normals[vertices[ti] * 3 + 2] += N.z;
+      normals[indices[ti] * 3] += N.x;
+      normals[indices[ti] * 3 + 1] += N.y;
+      normals[indices[ti] * 3 + 2] += N.z;
 
-      normals[vertices[ti + 1] * 3] += N.x;
-      normals[vertices[ti + 1] * 3 + 1] += N.y;
-      normals[vertices[ti + 1] * 3 + 2] += N.z;
+      normals[indices[ti + 1] * 3] += N.x;
+      normals[indices[ti + 1] * 3 + 1] += N.y;
+      normals[indices[ti + 1] * 3 + 2] += N.z;
 
-      normals[vertices[ti + 2] * 3] += N.x;
-      normals[vertices[ti + 2] * 3 + 1] += N.y;
-      normals[vertices[ti + 2] * 3 + 2] += N.z;
+      normals[indices[ti + 2] * 3] += N.x;
+      normals[indices[ti + 2] * 3 + 1] += N.y;
+      normals[indices[ti + 2] * 3 + 2] += N.z;
     }
 
-    for (int ni = 0; ni < normals.length; ni += 3) {
-      double l = normals[ni] * normals[ni]
-                 + normals[ni + 1] * normals[ni + 1]
-                 + normals[ni + 2] * normals[ni + 2];
+    for (var ni = 0; ni < normals.length; ni += 3) {
+      var l = normals[ni] * normals[ni] +
+          normals[ni + 1] * normals[ni + 1] +
+          normals[ni + 2] * normals[ni + 2];
       if (l == 0.0) {
         continue;
       }

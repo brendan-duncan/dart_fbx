@@ -10,9 +10,7 @@ class GlTexture {
     image.crossOrigin = 'anonymous';
 
     image.onLoad.listen((e) {
-      if (texture == null) {
-        texture = _gl.createTexture();
-      }
+      texture ??= _gl.createTexture();
 
       _gl.bindTexture(WebGL.TEXTURE_2D, texture);
 
@@ -43,5 +41,5 @@ class GlTexture {
     _gl.bindTexture(WebGL.TEXTURE_2D, texture);
   }
 
-  RenderingContext _gl;
+  final RenderingContext _gl;
 }

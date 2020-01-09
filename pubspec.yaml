@@ -1,5 +1,5 @@
 name: fbx
-version: 0.1.0
+version: 0.2.0
 description: An opensource decoder for the FBX 3d geometry and animation format.
 author: Brendan Duncan <brendanduncan@gmail.com>
 homepage: https://github.com/brendan-duncan/dart_fbx

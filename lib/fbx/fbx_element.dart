@@ -9,9 +9,9 @@ class FbxElement {
 
   FbxElement(this.id, [int propertyCount]) {
     if (propertyCount != null) {
-      properties = List(propertyCount);
+      properties = List<dynamic>(propertyCount);
     } else {
-      properties = List();
+      properties = <dynamic>[];
     }
   }
 
@@ -21,7 +21,13 @@ class FbxElement {
 
   double getDouble(int index) => toDouble(properties[index]);
 
-  double toDouble(x) => x is String ? double.parse(x) : x is bool ? (x ? 1.0 : 0.0) : x.toDouble();
+  double toDouble(dynamic x) =>
+      x is String ? double.parse(x) :
+      x is bool ? (x ? 1.0 : 0.0) :
+      (x as num).toDouble();
 
-  int toInt(x) => x is String ? int.parse(x) : x is bool ? (x ? 1 : 0) : x.toInt();
+  int toInt(dynamic x) =>
+      x is String ? int.parse(x) :
+      x is bool ? (x ? 1 : 0) :
+      (x as num).toInt();
 }

@@ -9,7 +9,7 @@ class FbxVideo extends FbxObject {
 
   FbxVideo(int id, String name, String type, FbxElement element, FbxScene scene)
     : super(id, name, type, element, scene) {
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'UseMipMap') {
         useMipMap = c.getInt(0);
       } else if (c.id == 'Filename') {

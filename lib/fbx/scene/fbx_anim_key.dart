@@ -18,6 +18,7 @@ class FbxAnimKey {
 
   FbxAnimKey(this.time, this.value, this.interpolation);
 
+  @override
   String toString() => '<$time : $value>';
 }
 

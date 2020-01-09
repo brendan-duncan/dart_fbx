@@ -36,7 +36,7 @@ class FbxAnimLayer extends FbxObject {
     rotationAccumulationMode = addProperty('RotationAccumulationMode', ROTATION_BY_LAYER);
     scaleAccumulationMode = addProperty('ScaleAccumulationMode', SCALE_MULTIPLY);
 
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'Weight') {
         weight.value = c.getDouble(0);
       } else if (c.id == 'Mute') {

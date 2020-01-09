@@ -1,18 +1,19 @@
 part of fbx_viewer;
 
 class GlLocator {
-  RenderingContext _gl;
+  final RenderingContext _gl;
   GlObject _glObject;
-  GlColorShader _colorShader;
+  final GlColorShader _colorShader;
   Matrix4 transform = Matrix4.identity();
 
   GlLocator(this._gl, this._colorShader) {
-    Float32List points = Float32List.fromList([0.0, 0.0, 0.0,
-                                                   1.0, 0.0, 0.0,
-                                                   0.0, 0.0, 0.0,
-                                                   0.0, 1.0, 0.0,
-                                                   0.0, 0.0, 0.0,
-                                                   0.0, 0.0, 1.0]);
+    final points = Float32List.fromList([
+      0.0, 0.0, 0.0,
+      1.0, 0.0, 0.0,
+      0.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 0.0,
+      0.0, 0.0, 1.0]);
 
     _glObject = GlObject(_gl, null, null);
     _glObject.setPoints(points);
@@ -20,7 +21,7 @@ class GlLocator {
 
   void draw(Matrix4 mvMatrix, Matrix4 pMatrix) {
     _colorShader.bind();
-    _colorShader.setMatrixUniforms(mvMatrix * transform, pMatrix);
+    _colorShader.setMatrixUniforms((mvMatrix * transform) as Matrix4, pMatrix);
 
     _colorShader.bindGeometry(_glObject);
 

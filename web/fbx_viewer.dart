@@ -18,7 +18,7 @@ part 'gl/gl_texture.dart';
 /// with GPU skinning and textures.
 class FbxViewer {
   RenderingContext _gl;
-  List<GlObject> _objects = [];
+  final List<GlObject> _objects = [];
   int _viewportWidth;
   int _viewportHeight;
 
@@ -26,18 +26,18 @@ class FbxViewer {
 
   Matrix4 _pMatrix;
   Matrix4 _mvMatrix;
-  GlShader _colorShader;
-  GlShader _normalShader;
+  //GlShader _colorShader;
+  //GlShader _normalShader;
   GlSkinningShader _skinningShader;
   GlTexture _texture;
 
   FbxViewer(CanvasElement canvas) {
     _viewportWidth = canvas.width;
     _viewportHeight = canvas.height;
-    _gl = canvas.getContext('experimental-webgl');
+    _gl = canvas.getContext('experimental-webgl') as RenderingContext;
 
-    _normalShader = GlNormalShader(_gl);
-    _colorShader = GlColorShader(_gl);
+    /*_normalShader =*/ GlNormalShader(_gl);
+    /*_colorShader =*/ GlColorShader(_gl);
     _skinningShader = GlSkinningShader(_gl);
 
     _gl.clearColor(0.3, 0.5, 0.7, 1.0);
@@ -48,7 +48,7 @@ class FbxViewer {
     _pMatrix = makePerspectiveMatrix(radians(54.43),
         _viewportWidth / _viewportHeight, 0.1, 1000.0);
 
-    String filename = 'data/knight_2014.fbx';
+    final filename = 'data/knight_2014.fbx';
     //String filename = 'data/cube_anim_ascii_2014.fbx';
     _mvMatrix = makeViewMatrix(Vector3(10.0, 0.0, 25.0),
                                Vector3(0.0, 0.0, 0.0),
@@ -71,15 +71,15 @@ class FbxViewer {
         }
 
         // Convert the text to binary byte list.
-        List<int> bytes = Uint8List.view(req.response);
+        List<int> bytes = Uint8List.view(req.response as ByteBuffer);
         print('LOADED FBX: ${bytes.length} bytes');
 
         _scene = FbxLoader().load(bytes);
         //_printScene(_scene);
 
         print('LOAD FINISHED');
-        for (FbxMesh mesh in _scene.meshes) {
-          FbxNode meshNode = mesh.getParentNode();
+        for (final mesh in _scene.meshes) {
+          final meshNode = mesh.getParentNode();
           if (meshNode == null) {
             continue;
           }
@@ -89,12 +89,12 @@ class FbxViewer {
             continue;
           }
 
-          GlObject object = GlObject(_gl, meshNode, mesh);
+          final object = GlObject(_gl, meshNode, mesh);
           _objects.add(object);
 
           object.setPoints(mesh.display[0].points, WebGL.DYNAMIC_DRAW);
           object.setNormals(mesh.display[0].normals, WebGL.DYNAMIC_DRAW);
-          object.setVertices(mesh.display[0].vertices);
+          object.setVertices(mesh.display[0].indices);
           object.setUvs(mesh.display[0].uvs);
           object.setSkinning(mesh.display[0].skinWeights,
                              mesh.display[0].skinIndices);
@@ -103,10 +103,12 @@ class FbxViewer {
 
           // TODO this is just a placeholder for testing. Need to implement a
           // decent material/texture system.
-          FbxMaterial material = meshNode.findConnectionsByType('Material').first;
+          final material =
+              meshNode.findConnectionsByType('Material').first as FbxMaterial;
+
           if (material != null) {
             if (material.diffuseColor.connectedFrom is FbxTexture) {
-              FbxTexture txt = material.diffuseColor.connectedFrom;
+              final txt = material.diffuseColor.connectedFrom as FbxTexture;
               _texture = GlTexture(_gl, 'data/' + txt.filename);
             }
           }
@@ -118,7 +120,7 @@ class FbxViewer {
   }
 
 
-  void _printNode(FbxNode node, [indent = 0]) {
+  /*void _printNode(FbxNode node, [indent = 0]) {
     String space = '';
     for (int i = 0; i < indent; ++i) {
       space += '    ';
@@ -140,15 +142,15 @@ class FbxViewer {
     for (var c in node.children) {
       _printNode(c, indent + 1);
     }
-  }
+  }*/
 
-  void _printScene(FbxScene scene) {
+  /*void _printScene(FbxScene scene) {
     for (var n in scene.rootNodes) {
       if (n is FbxNode) {
         _printNode(n);
       }
     }
-  }
+  }*/
 
   void render([num time=0]) {
     window.requestAnimationFrame(render);
@@ -166,8 +168,8 @@ class FbxViewer {
       }
     }
 
-    for (int i = 0, len = _objects.length; i < len; ++i) {
-      GlObject obj = _objects[i];
+    for (var i = 0, len = _objects.length; i < len; ++i) {
+      final obj = _objects[i];
 
       obj.update();
 
@@ -182,6 +184,7 @@ class FbxViewer {
 }
 
 void main() {
-  FbxViewer viewer = FbxViewer(document.querySelector('#fbxviewer'));
+  final viewer =
+      FbxViewer(document.querySelector('#fbxviewer') as CanvasElement);
   viewer.render();
 }

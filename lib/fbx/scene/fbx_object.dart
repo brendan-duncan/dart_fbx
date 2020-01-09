@@ -21,7 +21,7 @@ class FbxObject {
 
   FbxNode getParentNode() {
     if (this is FbxNode) {
-      return this;
+      return this as FbxNode;
     }
 
     for (var n in connectedFrom) {
@@ -31,7 +31,7 @@ class FbxObject {
     }
 
     for (var n in connectedFrom) {
-      FbxNode node = n.getParentNode();
+      final node = n.getParentNode();
       if (node != null) {
         return node;
       }
@@ -53,12 +53,10 @@ class FbxObject {
         ? connectedTo[index] : null;
 
   List<FbxObject> findConnectionsByType(String type,
-                                        [List<FbxObject> connections]) {
-    if (connections == null) {
-      connections = List<FbxObject>();
-    }
+      [List<FbxObject> connections]) {
+    connections ??= <FbxObject>[];
 
-    for (FbxObject obj in connectedTo) {
+    for (final obj in connectedTo) {
       if (obj.type == type) {
         connections.add(obj);
       }
@@ -73,7 +71,7 @@ class FbxObject {
   }
 
   void connectToProperty(String propertyName, FbxObject object) {
-    FbxProperty property = addProperty(propertyName);
+    final property = addProperty(propertyName);
     property.connectedFrom = object;
   }
 
@@ -81,14 +79,14 @@ class FbxObject {
 
   bool hasProperty(String name) => properties.containsKey(name);
 
-  FbxProperty addProperty(String name, [defaultValue]) {
+  FbxProperty addProperty(String name, [dynamic defaultValue]) {
     if (!properties.containsKey(name)) {
       properties[name] = FbxProperty(defaultValue);
     }
     return properties[name];
   }
 
-  FbxProperty setProperty(String name, value) {
+  FbxProperty setProperty(String name, dynamic value) {
     if (!properties.containsKey(name)) {
       properties[name] = FbxProperty(value);
     } else {
@@ -97,12 +95,21 @@ class FbxObject {
     return properties[name];
   }
 
-  getProperty(String name) =>
+  dynamic getProperty(String name) =>
       properties.containsKey(name) ? properties[name].value : null;
 
+  @override
   String toString() => '$name ($type)';
 
-  double toDouble(x) => x is double ? x : x is bool ? (x ? 1.0 : 0.0) : x is String ? double.parse(x) : x.toDouble();
+  double toDouble(dynamic x) =>
+      x is double ? x
+          : x is bool ? (x ? 1.0 : 0.0)
+          : x is String ? double.parse(x)
+          : (x as num).toDouble();
 
-  int toInt(x) => x is int ? x : x is bool ? (x ? 1 : 0) : x is String ? int.parse(x) : x.toInt();
+  int toInt(dynamic x) =>
+      x is int ? x
+          : x is bool ? (x ? 1 : 0)
+          : x is String ? int.parse(x)
+          : (x as num).toInt();
 }

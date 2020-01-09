@@ -3,7 +3,7 @@ part of fbx_viewer;
 class GlSkinningShader extends GlShader {
   static const int MAX_BONES = 60;
 
-  static const String vertexSource = """
+  static const String vertexSource = '''
     precision highp float;
     attribute vec3 aVertexPosition;
     attribute vec3 aVertexNormal;
@@ -50,9 +50,9 @@ class GlSkinningShader extends GlShader {
 
       uv = aVertexUv;
     }
-    """;
+    ''';
 
-  static const String fragmentSource = """
+  static const String fragmentSource = '''
     precision highp float;
     varying vec3 vNormal;
     varying vec2 uv;
@@ -65,7 +65,7 @@ class GlSkinningShader extends GlShader {
         gl_FragColor = vec4(mix(abs(vNormal), vec3(0.6, 0.7, 0.4), 0.5), 1.0);
       }
     }
-    """;
+    ''';
 
 
   GlSkinningShader(RenderingContext gl)
@@ -89,6 +89,7 @@ class GlSkinningShader extends GlShader {
     }
   }
 
+  @override
   void bindGeometry(GlObject obj) {
     super.bindGeometry(obj);
 

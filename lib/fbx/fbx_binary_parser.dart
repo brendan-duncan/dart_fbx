@@ -30,8 +30,8 @@ class FbxBinaryParser extends FbxParser {
   InputBuffer _input;
 
   static bool isValidFile(InputBuffer input) {
-    int fp = input.offset;
-    String header = input.readString(FILE_HEADER.length);
+    final fp = input.offset;
+    final header = input.readString(FILE_HEADER.length);
     input.offset = fp;
 
     if (header != FILE_HEADER) {
@@ -42,8 +42,8 @@ class FbxBinaryParser extends FbxParser {
   }
 
   FbxBinaryParser(InputBuffer input) {
-    int fp = input.offset;
-    String header = input.readString(FILE_HEADER.length);
+    final fp = input.offset;
+    final header = input.readString(FILE_HEADER.length);
 
     if (header != FILE_HEADER) {
       input.offset = fp;
@@ -56,14 +56,15 @@ class FbxBinaryParser extends FbxParser {
     _input.skip(4); // file version
   }
 
+  @override
   FbxElement nextElement() {
     if (_input == null) {
       return null;
     }
 
-    int endOffset = _input.readUint32();
-    int propCount = _input.readUint32();
-    int propLength = _input.readUint32();
+    final endOffset = _input.readUint32();
+    final propCount = _input.readUint32();
+    /*final propLength =*/ _input.readUint32();
 
     if (endOffset == 0) {
       return null;
@@ -71,10 +72,10 @@ class FbxBinaryParser extends FbxParser {
 
     var elemId = _input.readString(_input.readByte());
 
-    FbxElement elem = FbxElement(elemId, propCount);
+    final elem = FbxElement(elemId, propCount);
 
-    for (int i = 0; i < propCount; ++i) {
-      int s = _input.readByte();
+    for (var i = 0; i < propCount; ++i) {
+      final s = _input.readByte();
       elem.properties[i] = _readData(_input, s);
     }
 
@@ -90,18 +91,20 @@ class FbxBinaryParser extends FbxParser {
     }
 
     if (_input.position != endOffset) {
-      throw Exception("scope length not reached, something is wrong");
+      throw Exception('scope length not reached, something is wrong');
     }
 
     return elem;
   }
 
+  @override
   String sceneName() => 'Scene${NAME_SEP}Model';
 
+  @override
   String getName(String rawName) =>
       rawName.substring(0, rawName.codeUnits.indexOf(0));
 
-  _readData(InputBuffer input, int s) {
+  dynamic _readData(InputBuffer input, int s) {
     switch (s) {
       case TYPE_BOOL:
         return input.readByte() != 0;
@@ -138,19 +141,19 @@ class FbxBinaryParser extends FbxParser {
     return null;
   }
 
-  _readArray(InputBuffer input, int s, int arrayStride) {
-    const int UNCOMPRESSED = 0;
-    const int ZLIB_COMPRESSED = 1;
+  dynamic _readArray(InputBuffer input, int s, int arrayStride) {
+    const UNCOMPRESSED = 0;
+    const ZLIB_COMPRESSED = 1;
 
-    int length = input.readUint32();
-    int encoding = input.readUint32();
-    int compressedLength = input.readUint32();
+    final length = input.readUint32();
+    final encoding = input.readUint32();
+    final compressedLength = input.readUint32();
 
     var bytes = input.readBytes(compressedLength);
 
     Uint8List data;
     if (encoding == ZLIB_COMPRESSED) {
-      data = ZLibDecoder().decodeBytes(bytes.toUint8List());
+      data = ZLibDecoder().decodeBytes(bytes.toUint8List()) as Uint8List;
     } else if (encoding == UNCOMPRESSED) {
       data = bytes.toUint8List();
     } else {

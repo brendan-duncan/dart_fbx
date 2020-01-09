@@ -39,11 +39,11 @@ class FbxMaterial extends FbxObject {
     reflection = addProperty('Reflection', Vector3(1.0, 1.0, 1.0));
     reflectionFactor = addProperty('ReflectionFactor', 0.0);
 
-    for (FbxElement c in element.children) {
+    for (final c in element.children) {
       if (c.id == 'ShadingModel') {
         shadingModel.value = c.getString(0);
       } else if (c.id == 'Properties70') {
-        for (FbxElement p in c.children) {
+        for (final p in c.children) {
           if (p.properties[0] == 'AmbientColor') {
             ambientColor.value = Vector3(p.getDouble(4), p.getDouble(5),
                                              p.getDouble(6));

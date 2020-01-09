@@ -20,35 +20,38 @@ class FbxCluster extends FbxDeformer {
   FbxCluster(int id, String name, FbxElement element, FbxScene scene)
     : super(id, name, 'Cluster', element, scene) {
 
-    for (FbxElement c in element.children) {
-      var p = (c.properties.length == 1 && c.properties[0] is List) ? c.properties[0]
-              : (c.children.length == 1) ? c.children[0].properties
-              : c.properties;
+    for (final c in element.children) {
+      var p = ((c.properties.length == 1 && c.properties[0] is List)
+          ? c.properties[0]
+          : (c.children.length == 1)
+          ? c.children[0].properties
+          : c.properties) as List;
 
       if (c.id == 'Indexes') {
         indexes = Uint32List(p.length);
-        for (int i = 0, len = p.length; i < len; ++i) {
+        for (var i = 0, len = p.length; i < len; ++i) {
           indexes[i] = toInt(p[i]);
         }
       } else if (c.id == 'Weights') {
         weights = Float32List(p.length);
-        for (int i = 0, len = p.length; i < len; ++i) {
+        for (var i = 0, len = p.length; i < len; ++i) {
           weights[i] = toDouble(p[i]);
         }
       } else if (c.id == 'Transform') {
         transform = Matrix4.identity();
-        for (int i = 0, len = p.length; i < len; ++i) {
+        for (var i = 0, len = p.length; i < len; ++i) {
           transform.storage[i] = toDouble(p[i]);
         }
       } else if (c.id == 'TransformLink') {
         transformLink = Matrix4.identity();
-        for (int i = 0, len = p.length; i < len; ++i) {
+        for (var i = 0, len = p.length; i < len; ++i) {
           transformLink.storage[i] = toDouble(p[i]);
         }
       }
     }
   }
 
-  FbxNode getLink() => connectedTo.isNotEmpty ? connectedTo[0] : null;
+  FbxNode getLink() =>
+      connectedTo.isNotEmpty ? connectedTo[0] as FbxNode : null;
 }
 

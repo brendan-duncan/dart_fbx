@@ -12,11 +12,11 @@ class FbxAnimEvaluator extends FbxObject {
     : super(0, '', 'AnimEvaluator', null, scene);
 
   Matrix4 getNodeGlobalTransform(FbxNode node, double time) {
-    Matrix4 t = getNodeLocalTransform(node, time);
+    var t = getNodeLocalTransform(node, time);
 
     if (node.parent != null) {
-      Matrix4 pt = getNodeGlobalTransform(node.parent, time);
-      t = pt * t;
+      final pt = getNodeGlobalTransform(node.parent, time);
+      t = (pt * t) as Matrix4;
     }
 
     return t;
@@ -29,69 +29,72 @@ class FbxAnimEvaluator extends FbxObject {
     }
     node.evalTime = time;
 
-    double tx = node.translate.value.x;
-    double ty = node.translate.value.y;
-    double tz = node.translate.value.z;
-    double rx = node.rotate.value.x;
-    double ry = node.rotate.value.y;
-    double rz = node.rotate.value.z;
-    double sx = node.scale.value.x;
-    double sy = node.scale.value.y;
-    double sz = node.scale.value.z;
+    final t = node.translate.value as Vector3;
+    final r = node.rotate.value as Vector3;
+    final s = node.scale.value as Vector3;
+    var tx = t.x;
+    var ty = t.y;
+    var tz = t.z;
+    var rx = r.x;
+    var ry = r.y;
+    var rz = r.z;
+    var sx = s.x;
+    var sy = s.y;
+    var sz = s.z;
 
-    if (node.translate.connectedFrom != null
-        && node.translate.connectedFrom is FbxAnimCurveNode) {
-      FbxAnimCurveNode animNode = node.translate.connectedFrom;
-      Map ap = animNode.properties;
+    if (node.translate.connectedFrom != null &&
+        node.translate.connectedFrom is FbxAnimCurveNode) {
+      final animNode = node.translate.connectedFrom as FbxAnimCurveNode;
+      final ap = animNode.properties;
 
       if (ap.containsKey('X')) {
-        tx = evalCurve(ap['X'].connectedFrom, time);
+        tx = evalCurve(ap['X'].connectedFrom as FbxAnimCurve, time);
       }
 
       if (ap.containsKey('Y')) {
-        ty = evalCurve(ap['Y'].connectedFrom, time);
+        ty = evalCurve(ap['Y'].connectedFrom as FbxAnimCurve, time);
       }
 
       if (ap.containsKey('Z')) {
-        tz = evalCurve(ap['Z'].connectedFrom, time);
+        tz = evalCurve(ap['Z'].connectedFrom as FbxAnimCurve, time);
       }
     }
 
 
     if (node.rotate.connectedFrom != null
         && node.rotate.connectedFrom is FbxAnimCurveNode) {
-      FbxAnimCurveNode animNode = node.rotate.connectedFrom;
-      Map ap = animNode.properties;
+      final animNode = node.rotate.connectedFrom as FbxAnimCurveNode;
+      final ap = animNode.properties;
 
       if (ap.containsKey('X')) {
-        rx = evalCurve(ap['X'].connectedFrom, time);
+        rx = evalCurve(ap['X'].connectedFrom as FbxAnimCurve, time);
       }
 
       if (ap.containsKey('Y')) {
-        ry = evalCurve(ap['Y'].connectedFrom, time);
+        ry = evalCurve(ap['Y'].connectedFrom as FbxAnimCurve, time);
       }
 
       if (ap.containsKey('Z')) {
-        rz = evalCurve(ap['Z'].connectedFrom, time);
+        rz = evalCurve(ap['Z'].connectedFrom as FbxAnimCurve, time);
       }
     }
 
 
     if (node.scale.connectedFrom != null
         && node.scale.connectedFrom is FbxAnimCurveNode) {
-      FbxAnimCurveNode animNode = node.scale.connectedFrom;
-      Map ap = animNode.properties;
+      final animNode = node.scale.connectedFrom as FbxAnimCurveNode;
+      final ap = animNode.properties;
 
       if (ap.containsKey('X')) {
-        sx = evalCurve(ap['X'].connectedFrom, time);
+        sx = evalCurve(ap['X'].connectedFrom as FbxAnimCurve, time);
       }
 
       if (ap.containsKey('Y')) {
-        sy = evalCurve(ap['Y'].connectedFrom, time);
+        sy = evalCurve(ap['Y'].connectedFrom as FbxAnimCurve, time);
       }
 
       if (ap.containsKey('Z')) {
-        sz = evalCurve(ap['Z'].connectedFrom, time);
+        sz = evalCurve(ap['Z'].connectedFrom as FbxAnimCurve, time);
       }
     }
 
@@ -118,8 +121,8 @@ class FbxAnimEvaluator extends FbxObject {
       return curve.keyValue(0);
     }
 
-    for (int i = 0, numKeys = curve.numKeys; i < numKeys; ++i) {
-      double kf = scene.timeToFrame(curve.keyTime(i));
+    for (var i = 0, numKeys = curve.numKeys; i < numKeys; ++i) {
+      final kf = scene.timeToFrame(curve.keyTime(i));
       if (frame == kf) {
         return curve.keyValue(i);
       }
@@ -129,9 +132,9 @@ class FbxAnimEvaluator extends FbxObject {
           return curve.keyValue(i);
         }
 
-        double kf2 = scene.timeToFrame(curve.keyTime(i - 1));
+        final kf2 = scene.timeToFrame(curve.keyTime(i - 1));
 
-        double u = (frame - kf2) / (kf - kf2);
+        final u = (frame - kf2) / (kf - kf2);
 
         return ((1.0 - u) * curve.keyValue(i - 1)) +
                (u * curve.keyValue(i));

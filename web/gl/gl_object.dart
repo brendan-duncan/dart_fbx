@@ -4,7 +4,7 @@ class GlObject {
   FbxNode node;
   FbxMesh mesh;
 
-  RenderingContext _gl;
+  final RenderingContext _gl;
   Buffer positionBuffer;
   Buffer normalBuffer;
   Buffer uvBuffer;
@@ -26,18 +26,14 @@ class GlObject {
   }
 
   void setPoints(Float32List points, [int mode = WebGL.STATIC_DRAW]) {
-    if (positionBuffer == null) {
-      positionBuffer = _gl.createBuffer();
-    }
+    positionBuffer ??= _gl.createBuffer();
 
     _gl.bindBuffer(WebGL.ARRAY_BUFFER, positionBuffer);
     _gl.bufferData(WebGL.ARRAY_BUFFER, points, mode);
   }
 
   void setNormals(Float32List normals, [int mode = WebGL.STATIC_DRAW]) {
-    if (normalBuffer == null) {
-      normalBuffer = _gl.createBuffer();
-    }
+    normalBuffer ??= _gl.createBuffer();
 
     _gl.bindBuffer(WebGL.ARRAY_BUFFER, normalBuffer);
     _gl.bufferData(WebGL.ARRAY_BUFFER, normals, mode);
@@ -48,18 +44,14 @@ class GlObject {
       return;
     }
 
-    if (uvBuffer == null) {
-      uvBuffer = _gl.createBuffer();
-    }
+    uvBuffer ??= _gl.createBuffer();
 
     _gl.bindBuffer(WebGL.ARRAY_BUFFER, uvBuffer);
     _gl.bufferData(WebGL.ARRAY_BUFFER, uvs, mode);
   }
 
   void setVertices(Uint16List vertices, [int mode = WebGL.STATIC_DRAW]) {
-    if (indexBuffer == null) {
-      indexBuffer = _gl.createBuffer();
-    }
+    indexBuffer ??= _gl.createBuffer();
 
     _gl.bindBuffer(WebGL.ELEMENT_ARRAY_BUFFER, indexBuffer);
     _gl.bufferData(WebGL.ELEMENT_ARRAY_BUFFER, vertices, mode);

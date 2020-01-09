@@ -16,11 +16,9 @@ import 'fbx_video.dart';
 import 'fbx_texture.dart';
 import 'package:vector_math/vector_math.dart';
 
-/**
- * Contains the description of a complete 3D scene.
- */
+/// Contains the description of a complete 3D scene.
 class FbxScene extends FbxObject {
-  Map<String, dynamic> header = {};
+  final header = <String, dynamic>{};
 
   FbxGlobalSettings globalSettings;
   FbxObject sceneInfo;
@@ -58,7 +56,7 @@ class FbxScene extends FbxObject {
 
   int get timeMode {
     if (globalSettings != null) {
-      return globalSettings.timeMode.value;
+      return globalSettings.timeMode.value as int;
     }
     return FbxFrameRate.DEFAULT;
   }

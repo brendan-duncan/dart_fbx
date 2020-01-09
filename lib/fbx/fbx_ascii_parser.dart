@@ -10,8 +10,8 @@ class FbxAsciiParser extends FbxParser {
   InputBuffer _input;
 
   static bool isValidFile(InputBuffer input) {
-    int fp = input.offset;
-    String header = input.readString(FILE_HEADER.length);
+    final fp = input.offset;
+    final header = input.readString(FILE_HEADER.length);
     input.offset = fp;
 
     if (header != FILE_HEADER) {
@@ -22,8 +22,8 @@ class FbxAsciiParser extends FbxParser {
   }
 
   FbxAsciiParser(InputBuffer input) {
-    int fp = input.offset;
-    String header = input.readString(FILE_HEADER.length);
+    final fp = input.offset;
+    final header = input.readString(FILE_HEADER.length);
     input.offset = fp;
 
     if (header != FILE_HEADER) {
@@ -33,12 +33,13 @@ class FbxAsciiParser extends FbxParser {
     _input = input;
   }
 
+  @override
   FbxElement nextElement() {
     if (_input == null) {
       return null;
     }
 
-    String tk = _nextToken(_input);
+    var tk = _nextToken(_input);
     if (tk == '}') {
       return null;
     }
@@ -47,14 +48,14 @@ class FbxAsciiParser extends FbxParser {
       return null;
     }
 
-    FbxElement elem = FbxElement(tk);
+    final elem = FbxElement(tk);
 
-    int sp = _input.offset;
+    final sp = _input.offset;
     tk = _nextToken(_input);
 
     // If the next token is a node definition (nodeType:*), then back up
     // and save it for the next node.
-    String tk2 = _nextToken(_input, peek: true);
+    final tk2 = _nextToken(_input, peek: true);
     if (tk2 == ':') {
       _input.offset = sp;
       return elem;
@@ -77,7 +78,7 @@ class FbxAsciiParser extends FbxParser {
     }
 
     if (tk == '{') {
-      FbxElement n = nextElement();
+      var n = nextElement();
       while (n != null) {
         elem.children.add(n);
         n = nextElement();
@@ -87,22 +88,24 @@ class FbxAsciiParser extends FbxParser {
     return elem;
   }
 
+  @override
   String sceneName() => 'Model::Scene';
 
+  @override
   String getName(String rawName) => rawName.split('::').last;
 
-  String _nextToken(InputBuffer input, {bool peek: false}) {
+  String _nextToken(InputBuffer input, {bool peek = false}) {
     _skipWhitespace(input);
 
     if (input.isEOS) {
       return null;
     }
 
-    int sp = input.offset;
-    int c = input.readByte();
+    final sp = input.offset;
+    var c = input.readByte();
 
     if (c == TK_QUOTE) {
-      String s = _readString(input);
+      final s = _readString(input);
       if (peek) {
         input.offset = sp;
       }
@@ -110,7 +113,7 @@ class FbxAsciiParser extends FbxParser {
     }
 
     if (c == TK_COMMA || c == TK_LBRACE || c == TK_RBRACE || c == TK_COLON) {
-      String s = String.fromCharCode(c);
+      final s = String.fromCharCode(c);
       if (peek) {
         input.offset = sp;
       }
@@ -125,10 +128,10 @@ class FbxAsciiParser extends FbxParser {
       input.skip(1);
     }
 
-    int ep = input.offset;
+    final ep = input.offset;
     input.offset = sp;
 
-    String token = input.readString(ep - sp);
+    final token = input.readString(ep - sp);
     if (peek) {
       input.offset = sp;
     }
@@ -137,16 +140,16 @@ class FbxAsciiParser extends FbxParser {
   }
 
   String _readString(InputBuffer input) {
-    int sp = input.offset;
+    final sp = input.offset;
     while (!input.isEOS) {
-      int c = input.readByte();
+      final c = input.readByte();
       if (c == TK_QUOTE) {
         break;
       }
     }
-    int ep = input.offset;
+    final ep = input.offset;
     input.offset = sp;
-    String string = input.readString(ep - sp - 1); // don't include ending "
+    final string = input.readString(ep - sp - 1); // don't include ending "
     input.skip(1); // skip ending "
     return string;
   }
@@ -165,7 +168,7 @@ class FbxAsciiParser extends FbxParser {
 
   void _skipWhitespace(InputBuffer input) {
     while (!input.isEOS) {
-      int c = input.peekBytes(1)[0];
+      final c = input.peekBytes(1)[0];
 
       if (c == TK_SPACE || c == TK_TAB || c == TK_RL || c == TK_NL) {
         input.skip(1);
@@ -175,7 +178,7 @@ class FbxAsciiParser extends FbxParser {
       // skip comments
       if (c == TK_SEMICOLON) {
         while (!input.isEOS) {
-          int c2 = input.readByte();
+          final c2 = input.readByte();
           if (c2 == TK_NL) {
             break;
           }
