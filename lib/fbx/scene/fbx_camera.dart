@@ -1,11 +1,11 @@
 /// Copyright (C) 2015 Brendan Duncan. All rights reserved.
 import '../fbx_element.dart';
-import 'fbx_node_attribute.dart';
+import 'fbx_node.dart';
 import 'fbx_property.dart';
 import 'fbx_scene.dart';
 import 'package:vector_math/vector_math.dart';
 
-class FbxCamera extends FbxNodeAttribute {
+class FbxCamera extends FbxNode {
   FbxProperty position;
   FbxProperty lookAt;
   FbxProperty cameraOrthoZoom;

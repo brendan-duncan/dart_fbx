@@ -49,6 +49,7 @@ class FbxViewer {
         _viewportWidth / _viewportHeight, 0.1, 1000.0);
 
     final filename = 'data/knight_2014.fbx';
+    //final filename = 'data/monkey.fbx';
     //String filename = 'data/cube_anim_ascii_2014.fbx';
     _mvMatrix = makeViewMatrix(Vector3(10.0, 0.0, 25.0),
                                Vector3(0.0, 0.0, 0.0),

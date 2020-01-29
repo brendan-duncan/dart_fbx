@@ -17,7 +17,8 @@ var files = [
   'web/data/cylinder_skinned_ascii_fbx2014.fbx',
   'web/data/cylinder_skinned_bin_fbx2006.fbx',
   'web/data/knight.fbx',
-  'web/data/knight_2014.fbx'
+  'web/data/knight_2014.fbx',
+  'web/data/monkey.fbx'
 ];
 
 void loadFile(String filename) {

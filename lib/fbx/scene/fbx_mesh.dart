@@ -526,6 +526,11 @@ class FbxMesh extends FbxGeometry {
         for (var i = 0, j = 0, len = p.length; i < len; i += 2) {
           uvs.data[j++] = Vector2(toDouble(p[i]), toDouble(p[i + 1]));
         }
+      } else if (c.id == 'UVIndex' && p.isNotEmpty) {
+        uvs.indexArray = List<int>(p.length);
+        for (var i = 0, j = 0, len = p.length; i < len; i++) {
+          uvs.indexArray[j++] = toInt(p[i]);
+        }
       }
     }
   }

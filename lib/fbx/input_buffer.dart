@@ -213,7 +213,26 @@ class InputBuffer {
 
   /// Read a 32-bit float.
   double readFloat64() {
-    return uint64ToFloat64(readUint64());
+    if (bigEndian) {
+      __uint8[0] = buffer[offset++] & 0xff;
+      __uint8[1] = buffer[offset++] & 0xff;
+      __uint8[2] = buffer[offset++] & 0xff;
+      __uint8[3] = buffer[offset++] & 0xff;
+      __uint8[4] = buffer[offset++] & 0xff;
+      __uint8[5] = buffer[offset++] & 0xff;
+      __uint8[6] = buffer[offset++] & 0xff;
+      __uint8[7] = buffer[offset++] & 0xff;
+    } else {
+      __uint8[7] = buffer[offset++] & 0xff;
+      __uint8[6] = buffer[offset++] & 0xff;
+      __uint8[5] = buffer[offset++] & 0xff;
+      __uint8[4] = buffer[offset++] & 0xff;
+      __uint8[3] = buffer[offset++] & 0xff;
+      __uint8[2] = buffer[offset++] & 0xff;
+      __uint8[1] = buffer[offset++] & 0xff;
+      __uint8[0] = buffer[offset++] & 0xff;
+    }
+    return Float64List.view(__uint8.buffer)[0];
   }
 
   List<int> toList([int offset = 0, int length = 0]) {
@@ -244,3 +263,5 @@ class InputBuffer {
     return Uint32List.view(toUint8List().buffer);
   }
 }
+
+final __uint8 = Uint8List(8);

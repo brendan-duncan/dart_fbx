@@ -1,11 +1,11 @@
 /// Copyright (C) 2015 Brendan Duncan. All rights reserved.
 import '../fbx_element.dart';
-import 'fbx_node_attribute.dart';
+import 'fbx_node.dart';
 import 'fbx_property.dart';
 import 'fbx_scene.dart';
 import 'package:vector_math/vector_math.dart';
 
-class FbxLight extends FbxNodeAttribute {
+class FbxLight extends FbxNode {
   static const int SPOT = 0;
   static const int POINT = 1;
   static const int DIRECTIONAL = 2;
